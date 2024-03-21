@@ -1,0 +1,31 @@
+---
+title: "Case Study 1"
+author: "Raquel Panadero Palenzuela, Rita Selimi, Brais Guardado Collazo"
+date: "2024-03-21"
+output: html_document
+---
+
+*The .Rmd and .html (alternatively the .pdf) should be uploaded in TUWEL by the deadline. Refrain from using explanatory comments in the R code chunks but write them as text instead. Points will be deducted if the submitted file is not in a decent form.*
+
+# Case Study 1
+### AKSTA Statistical Computing
+
+<!-- Block 1 -->
+## 1. Ratio of Fibonacci Numbers
+
+
+
+<!-- Block 2 -->
+## 4. Game of Craps
+
+
+
+
+## 5. Readable and efficient code
+
+
+
+<!-- Block 3 -->
+## 6. Measuring and improving performance
+
+
