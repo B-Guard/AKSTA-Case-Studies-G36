@@ -7,9 +7,6 @@ output: html_document
 
 *The .Rmd and .html (alternatively the .pdf) should be uploaded in TUWEL by the deadline. Refrain from using explanatory comments in the R code chunks but write them as text instead. Points will be deducted if the submitted file is not in a decent form.*
 
-# Case Study 1
-### AKSTA Statistical Computing
-
 <!-- Block 1 -->
 ## 1. Ratio of Fibonacci Numbers
 
@@ -17,13 +14,169 @@ output: html_document
 
 <!-- Block 2 -->
 ## 4. Game of Craps
+The code below defines a couple of functions to simulate a game of craps, 
+as defined by the exercise sheet.
+The main idea to simulate a game of craps is simple:
 
+1. Execute a function to generate dice rolls.
+2. Depending on the previous output, decide outcome of the round.
+
+The first step then is to figure out how to generate a roll dice in R.
+After some research, the function `sample()`, has been found. Having a quick
+look at `?sample()` we can go and implement the following function:
+
+```{r}
+roll_die <- function() {
+  return(sample(1:6, 1, replace = TRUE))
+}
+```
+
+We specifically overwrite the default parameter `replace` to be `TRUE`, which
+is equal to say that consecutive dice rolls are independent from one another.
+With this in hand, the remaining code is straight forward.
+
+```{r}
+# Simulate a single round of game of craps
+play_craps <- function() {
+  point_number <- roll_die() # First roll
+  print(paste("First roll was:", point_number))
+
+  if (point_number == 6) {
+    print("Congrats, you won!")
+    return(TRUE) # Inmediate win
+  } else if (point_number == 1) {
+    print("Oops, you lost...")
+    return(FALSE) # Inmediate loss
+  }
+
+  # Roll up to three more times to match point number
+  for (i in 1:3) {
+    roll <- roll_die()
+    print(paste("Roll", i, "is:", roll))
+    if (roll == point_number) {
+      print("Congrats, you won!")
+      return(TRUE) # Player wins
+    }
+  }
+  # After three rolls, round is lost
+  print("Bad luck, maybe next time :)")
+  return(FALSE)
+}
+```
+Let us play a couple of rounds...
+```{r}
+play_craps()
+play_craps()
+play_craps()
+```
 
 
 
 ## 5. Readable and efficient code
+```R
+set.seed(1)
+x <- rnorm(1000)
+y <- 2 + x + rnorm(1000)
+df <- data.frame(x, y)
+
+cat("Step", 1, "\n")
+fit1 <- lm(y ~ x, data = df[-(1:250),])
+p1 <- predict(fit1, newdata = df[(1:250),])
+r <- sqrt(mean((p1 - df[(1:250),"y"])^2))
+
+cat("Step", 2, "\n")
+fit2 <- lm(y ~ x, data = df[-(251:500),])
+p2 <- predict(fit2, newdata = df[(251:500),])
+r <- c(r, sqrt(mean((p2 - df[(251:500),"y"])^2)))
+
+cat("Step", 3, "\n")
+fit3 <- lm(y ~ x, data = df[-(501:750),])
+p3 <- predict(fit3, newdata = df[(501:750),])
+r <- c(r, sqrt(mean((p3 - df[(501:750),"y"])^2)))
+
+cat("Step", 4, "\n")
+fit4 <- lm(y ~ x, data = df[-(751:1000),])
+p4 <- predict(fit4, newdata = df[(751:1000),])
+r <- c(r, sqrt(mean((p4 - df[(751:1000),"y"])^2)))
+r
+```
+#### a. Code explanation
+This code executes four times a linear regression on the same set of data, 
+modifing each time just the subset of data used to train and test the model. 
+For every model, the RMSE (root mean squared error) is computed 
+on the test subset. The result is appended to a vector, which is finally 
+*returned*.
 
 
+#### b. Changes to improve readability
+Several measures can be employed to improve the readability of the code. The 
+first one is renaming variables. Although `p1` might be easy to write, does very 
+little in terms of helping to undertand what the variable represents. Same goes 
+for the variable `r`.
+
+Another potential improvement is to set a new variable to indicate the interval 
+in which train/test data will be split. This yields not only more readable code, 
+but also easy access to modify the interval with just one variable.
+
+#### c. Function wrapping
+<!-- Function should have at most 10 lines... it has 12 -->
+```{r}
+linear_model_rsme <- function(formula, data, partitions = 4) {
+  if (partitions < nrow(data) && partitions > 2) {
+    rmse <- vector("numeric", length = partitions)
+
+    for (i in seq(0, partitions - 1)) {
+      interval <- ((i * nrow(data) / partitions) + 1):
+        ((i + 1) * nrow(data) / partitions)
+      model <- lm(formula, data[-(interval), ])
+      predictions <- predict(model, newdata = data[interval, ])
+      rmse[i + 1] <- sqrt(mean((predictions - data[interval, "y"])^2))
+    }
+    return(rmse)
+  } else {
+    return(c(NA))
+  }
+}
+```
+*Please note: if `x <- 1; y <- 2` counts as two lines, we have taken the liberty*
+*to say that:*
+```R
+interval <- (1 + i * nrow(data) / partitions):
+            ((i + 1) * nrow(data) / partitions)
+```
+*counts as only one*.
+
+**Performing checks**
+```{r}
+set.seed(1)
+x <- rnorm(1000)
+y <- 2 + x + rnorm(1000)
+df <- data.frame(x, y)
+```
+
+```{r}
+fit1 <- lm(y ~ x, data = df[-(1:250), ])
+p1 <- predict(fit1, newdata = df[(1:250), ])
+r <- sqrt(mean((p1 - df[(1:250), "y"])^2))
+
+fit2 <- lm(y ~ x, data = df[-(251:500), ])
+p2 <- predict(fit2, newdata = df[(251:500), ])
+r <- c(r, sqrt(mean((p2 - df[(251:500), "y"])^2)))
+
+fit3 <- lm(y ~ x, data = df[-(501:750), ])
+p3 <- predict(fit3, newdata = df[(501:750), ])
+r <- c(r, sqrt(mean((p3 - df[(501:750), "y"])^2)))
+
+fit4 <- lm(y ~ x, data = df[-(751:1000), ])
+p4 <- predict(fit4, newdata = df[(751:1000), ])
+r <- c(r, sqrt(mean((p4 - df[(751:1000), "y"])^2)))
+r
+```
+
+```{r}
+rmse <- linear_model_rsme(y ~ x, df)
+rmse
+```
 
 <!-- Block 3 -->
 ## 6. Measuring and improving performance

@@ -10,8 +10,8 @@ This case study is divied into six parts. It seems they are not equal in *effort
     - [ ] Gamma function
     - [ ] The golden ratio
 - Block 2:
-    - [ ] Game of craps
-    - [ ] Readable and efficient code
+    - [x] Game of craps
+    - [x] Readable and efficient code
 - Block 3:
     - [ ] Measuring and improving performance
 
