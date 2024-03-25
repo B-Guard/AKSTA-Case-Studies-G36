@@ -118,21 +118,27 @@ Another potential improvement is to set a new variable to indicate the interval
 in which train/test data will be split. This yields not only more readable code, 
 but also easy access to modify the interval with just one variable.
 
+The final and most important improvement in readability is to actually use the
+RMSE function provided by the `Metrics` package in R, instead of writting the 
+long `sqrt(mean(...))`.
+
 #### c. Function wrapping
 <!-- Function should have at most 10 lines... it has 12 -->
 ```{r}
+library("Metrics")
+
 linear_model_rsme <- function(formula, data, partitions = 4) {
   if (partitions < nrow(data) && partitions > 2) {
-    rmse <- vector("numeric", length = partitions)
+    result <- vector("numeric", length = partitions)
 
     for (i in seq(0, partitions - 1)) {
       interval <- ((i * nrow(data) / partitions) + 1):
         ((i + 1) * nrow(data) / partitions)
       model <- lm(formula, data[-(interval), ])
       predictions <- predict(model, newdata = data[interval, ])
-      rmse[i + 1] <- sqrt(mean((predictions - data[interval, "y"])^2))
+      result[i + 1] <- rmse(data[interval, "y"], predictions)
     }
-    return(rmse)
+    return(result)
   } else {
     return(c(NA))
   }
@@ -174,8 +180,8 @@ r
 ```
 
 ```{r}
-rmse <- linear_model_rsme(y ~ x, df)
-rmse
+r <- linear_model_rsme(y ~ x, df)
+r
 ```
 
 <!-- Block 3 -->
