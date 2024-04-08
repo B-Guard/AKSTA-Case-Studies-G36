@@ -3,27 +3,264 @@ title: "Case Study 1"
 author: "Raquel Panadero Palenzuela, Rita Selimi, Brais Guardado Collazo"
 date: "2024-03-21"
 output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
-*The .Rmd and .html (alternatively the .pdf) should be uploaded in TUWEL by the deadline. Refrain from using explanatory comments in the R code chunks but write them as text instead. Points will be deducted if the submitted file is not in a decent form.*
+*The .Rmd and .html (alternatively the .pdf) should be uploaded in TUWEL
+by the deadline. Refrain from using explanatory comments in the R code
+chunks but write them as text instead. Points will be deducted if the
+submitted file is not in a decent form.*
 
 <!-- Block 1 -->
+
 ## 1. Ratio of Fibonacci Numbers
 
+#### a.
 
+Write two different R functions which return the sequence
+$r_i = \frac{F_{i+1}}{F_i}$ for $i = 1, \ldots, n$ where $F_i$ is the
+$i$th Fibonacci number, once using for and once using while.
+
+```{r}
+fib_ratio_for <- function(n) {
+  Fib <- numeric(n)
+  Fib[1:2] <- c(1, 1)
+  for (i in 3:n) {
+    Fib[i] <- Fib[i - 1] + Fib[i - 2]
+  }
+  return(Fib[-1] / Fib[-n])
+}
+
+fib_ratio_while <- function(n) {
+  Fib <- numeric(n)
+  Fib[1:2] <- c(1, 1)
+  i <- 3
+  while (i <= n) {
+    Fib[i] <- Fib[i - 1] + Fib[i - 2]
+    i <- i + 1
+  }
+  return(Fib[-1] / Fib[-n])
+}
+```
+
+#### b.
+
+Benchmark the two functions for $n = 200$ and $n = 2000$ (you can use
+package `microbenchmark` or package `bench` for this purpose). Which
+function is faster?
+
+```{r}
+library(microbenchmark)
+
+result_n_200 <- microbenchmark(
+  for_loop_200 = fib_ratio_for(200),
+  while_loop_200 = fib_ratio_while(200),
+  times = 1000
+)
+result_n_2000 <- microbenchmark(
+  for_loop_2000 = fib_ratio_for(2000),
+  while_loop_2000 = fib_ratio_while(2000),
+  times = 1000
+)
+print(result_n_200)
+print(result_n_2000)
+```
+
+Given these results, it's evident (based on the mean and median columns)
+that the for loop function significantly outperforms the while loop for
+both $n = 200$ and $n = 2000$. This is because the for loop doesn't
+require checking the condition every time; we know the exact number of
+loop iterations in advance.
+
+#### c.
+
+Plot the sequence for $n = 100$. For which value n it starts to
+converge? What is the number that it converges to?
+
+```{r}
+fib_ratio_100 = fib_ratio_for(100)
+plot(fib_ratio_100, type = "l", xlab = "n", ylab = "Ratio", main = "Ratio of Fibonacci numbers for n = 100")
+```
+
+```{r}
+# Check for convergence
+for (i in 3:length(fib_ratio_100)) {
+  if (round(fib_ratio_100[i], digits = 6) == round(fib_ratio_100[i + 1], digits = 6)) {
+    cat("Convergence occurs at n =", i, "\nThe number it converges to is:", fib_ratio_100[i])
+    break
+  }
+}
+```
+
+## 2. Gamma function
+
+#### a.
+
+Write a function to compute the following for $n$ a positive integer
+using the `gamma` function in base R.
+
+$\rho_n = \Gamma\left(\frac{n - 1}{2}\right) \times \Gamma\left(\frac{1}{2}\right) \times \Gamma\left(\frac{n - 2}{2}\right)$
+
+```{r}
+compute_rho <- function(n) {
+  nom <- gamma((n - 1) / 2)
+  den <- gamma(1/2) * gamma((n - 2) / 2)
+  return(nom / den)
+}
+```
+
+#### b.
+
+Try $n = 2000$. What do you observe? Why do you think the observed
+behavior happens?
+
+```{r}
+compute_rho(2000)
+```
+
+$\rho_n$ produces `NaN` (Not a Number) values for large values of $n$.
+This occurs because the gamma function returns `Inf` (Infinity) for high
+values of $n$, resulting in $\rho_n$ being ${Inf}/{Inf}$, which
+evaluates to `NaN`.
+
+#### c.
+
+Write an implementation which can also deal with large values of
+$n > 1000$.
+
+```{r}
+compute_rho_fixed <- function(n) {
+  nom <- gamma((n - 1) / 2)
+  if (is.infinite(nom)) {
+   return(Inf)
+  }
+  den <- gamma(1/2) * gamma((n - 2) / 2)
+  return(nom / den)
+}
+```
+
+As the numerator grows faster than the denominator, $p_n$ approaches
+infinity when $n$ goes to infinity. Therefore, if the numerator yields
+infinity, we can directly return infinity.
+
+#### d.
+
+Plot $\frac{\rho_n}{\sqrt{n}}$ for different values of $n$. Can you
+guess the limit of $\frac{\rho_n}{\sqrt{n}}$ for $n \rightarrow \infty$?
+
+```{r}
+n_values <- seq(5, 2000, by = 20)
+
+rho_sqrt_n <- lapply(n_values, function(n) {
+  rho_n <- compute_rho(n)
+  result <- rho_n / sqrt(n)
+  return(result)
+})
+
+plot(
+  n_values, rho_sqrt_n, type = "l", xlab = "n", 
+  ylab = expression(rho[n]/sqrt(n)),
+  main = expression("Plot of " * rho[n]/sqrt(n) * " against " * n)
+)
+```
+
+The limit of $p_n / \sqrt n$ when $n$ goes to infinity is 0.4.
+
+## 3. The golden ratio
+
+Two positive numbers $x$ and $y$ with $x > y$ are said to be in the
+golden ratio if the ratio between the larger number and the smaller
+number is the same as the ratio between their sum and the larger number:
+$$
+\frac{x}{y} = \frac{x + y}{x}
+$$ The golden ratio $\Phi = \frac{x}{y}$ can be computed as a solution
+to $\Phi^2 - \Phi - 1 = 0$ and is $$
+\Phi = \frac{\sqrt{5} + 1}{2}
+$$ and it satisfies the Fibonacci-like relationship: $$
+\Phi^{n+1} = \Phi^{n} + \Phi^{n-1}
+$$
+
+#### a.
+
+Write an R function which computes $\Phi^{n+1}$ using the recursion
+above (go up to $n = 1000$).
+
+```{r}
+golden_ratio_recursion <- function(n) {
+  phi_values <- numeric(n)
+  phi_values[1] <- (sqrt(5) + 1) / 2
+  phi_values[2] <- (sqrt(5) + 1) / 2 + 1
+  
+  for (i in 3:n) {
+    phi_values[i] <- phi_values[i - 1] + phi_values[i - 2]
+  }
+  
+  return(phi_values[n])
+}
+
+print(golden_ratio_recursion(1000))
+```
+
+#### b.
+
+Write a function which computes this $\Phi^{n+1}$ by simply using the
+power operator ˆ.
+
+```{r}
+golden_ratio_power <- function(n) {
+  phi <- (sqrt(5) + 1) / 2
+  return(phi^(n-1) + phi^(n-2))
+}
+
+print(golden_ratio_power(1000))
+```
+
+#### c.
+
+Use once `==` and once `all.equal` to compare $\Phi^{n+1}$ obtained in
+a. vs the one obtained in b. for $n = 12, 60, 120, 300$. What do you
+observe? If there are any differences, what can be the reason?
+
+```{r}
+v <- c(12, 60, 120, 300)
+r1 <- sapply(v, golden_ratio_recursion)
+r2 <- sapply(v, golden_ratio_power)
+
+print(r1)
+print(r2)
+
+print(r1 == r2)
+print(all.equal(r1, r2))
+
+sprintf("%.15f", r1[1])
+sprintf("%.15f", r2[1])
+```
+
+We observe that with `==`, it checks for identical double numbers.
+Although these numbers are not identical, for instance, for $\Phi^{12}$,
+they are identical up to the thirteenth decimal place. Conversely,
+`all.equal` tests for near equality. `==` is more precise, as it has no
+tolerance. Due to the nature of floating-point numbers, we notice slight
+differences, but many digits down. In this scenario, `all.equal` returns
+`TRUE`, while `==` returns `FALSE`.
 
 <!-- Block 2 -->
-## 4. Game of Craps
-The code below defines a couple of functions to simulate a game of craps, 
-as defined by the exercise sheet.
-The main idea to simulate a game of craps is simple:
 
-1. Execute a function to generate dice rolls.
-2. Depending on the previous output, decide outcome of the round.
+## 4. Game of Craps
+
+The code below defines a couple of functions to simulate a game of
+craps, as defined by the exercise sheet. The main idea to simulate a
+game of craps is simple:
+
+1.  Execute a function to generate dice rolls.
+2.  Depending on the previous output, decide outcome of the round.
 
 The first step then is to figure out how to generate a roll dice in R.
-After some research, the function `sample()`, has been found. Having a quick
-look at `?sample()` we can go and implement the following function:
+After some research, the function `sample()`, has been found. Having a
+quick look at `?sample()` we can go and implement the following
+function:
 
 ```{r}
 roll_die <- function() {
@@ -31,9 +268,9 @@ roll_die <- function() {
 }
 ```
 
-We specifically overwrite the default parameter `replace` to be `TRUE`, which
-is equal to say that consecutive dice rolls are independent from one another.
-With this in hand, the remaining code is straight forward.
+We specifically overwrite the default parameter `replace` to be `TRUE`,
+which is equal to say that consecutive dice rolls are independent from
+one another. With this in hand, the remaining code is straight forward.
 
 ```{r}
 # Simulate a single round of game of craps
@@ -63,17 +300,18 @@ play_craps <- function() {
   return(FALSE)
 }
 ```
+
 Let us play a couple of rounds...
+
 ```{r}
 play_craps()
 play_craps()
 play_craps()
 ```
 
-
-
 ## 5. Readable and efficient code
-```R
+
+``` r
 set.seed(1)
 x <- rnorm(1000)
 y <- 2 + x + rnorm(1000)
@@ -100,30 +338,35 @@ p4 <- predict(fit4, newdata = df[(751:1000),])
 r <- c(r, sqrt(mean((p4 - df[(751:1000),"y"])^2)))
 r
 ```
-#### a. Code explanation
-This code executes four times a linear regression on the same set of data, 
-modifing each time just the subset of data used to train and test the model. 
-For every model, the RMSE (root mean squared error) is computed 
-on the test subset. The result is appended to a vector, which is finally 
-*returned*.
 
+#### a. Code explanation
+
+This code executes four times a linear regression on the same set of
+data, modifying each time just the subset of data used to train and test
+the model. For every model, the RMSE (root mean squared error) is
+computed on the test subset. The result is appended to a vector, which
+is finally *returned*.
 
 #### b. Changes to improve readability
-Several measures can be employed to improve the readability of the code. The 
-first one is renaming variables. Although `p1` might be easy to write, does very 
-little in terms of helping to undertand what the variable represents. Same goes 
-for the variable `r`.
 
-Another potential improvement is to set a new variable to indicate the interval 
-in which train/test data will be split. This yields not only more readable code, 
-but also easy access to modify the interval with just one variable.
+Several measures can be employed to improve the readability of the code.
+The first one is renaming variables. Although `p1` might be easy to
+write, does very little in terms of helping to understand what the
+variable represents. Same goes for the variable `r`.
 
-The final and most important improvement in readability is to actually use the
-RMSE function provided by the `Metrics` package in R, instead of writting the 
-long `sqrt(mean(...))`.
+Another potential improvement is to set a new variable to indicate the
+interval in which train/test data will be split. This yields not only
+more readable code, but also easy access to modify the interval with
+just one variable.
+
+The final and most important improvement in readability is to actually
+use the RMSE function provided by the `Metrics` package in R, instead of
+writing the long `sqrt(mean(...))`.
 
 #### c. Function wrapping
+
 <!-- Function should have at most 10 lines... it has 12 -->
+
 ```{r}
 library("Metrics")
 
@@ -144,15 +387,19 @@ linear_model_rsme <- function(formula, data, partitions = 4) {
   }
 }
 ```
-*Please note: if `x <- 1; y <- 2` counts as two lines, we have taken the liberty*
-*to say that:*
-```R
+
+*Please note: if `x <- 1; y <- 2` counts as two lines, we have taken the
+liberty* *to say that:*
+
+``` r
 interval <- (1 + i * nrow(data) / partitions):
             ((i + 1) * nrow(data) / partitions)
 ```
+
 *counts as only one*.
 
 **Performing checks**
+
 ```{r}
 set.seed(1)
 x <- rnorm(1000)
@@ -185,6 +432,5 @@ r
 ```
 
 <!-- Block 3 -->
+
 ## 6. Measuring and improving performance
-
-
