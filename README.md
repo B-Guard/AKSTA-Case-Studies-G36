@@ -6,9 +6,9 @@
 
 This case study is divied into six parts. It seems they are not equal in *effort to be invested*, so it is proposed to divide the work in these blocks:
 - Block 1:
-    - [ ] Ratio of Fibonacci numbers
-    - [ ] Gamma function
-    - [ ] The golden ratio
+    - [x] Ratio of Fibonacci numbers
+    - [x] Gamma function
+    - [x] The golden ratio
 - Block 2:
     - [x] Game of craps
     - [x] Readable and efficient code
