@@ -1,11 +1,24 @@
 ---
 title: "Case Study 1"
-author: "Raquel Panadero Palenzuela, Rita Selimi, Brais Guardado Collazo"
-date: "2024-03-21"
-output: html_document
+author: 
+  - Raquel Panadero Palenzuela 
+  - Rita Selimi
+  - Brais Guardado Collazo
+date: "`r format(Sys.time(), '%d-%m-%Y')`"
 editor_options: 
   markdown: 
-    wrap: 72
+    wrap: 72 # Couldn't we have 80...? :|
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    smooth_scroll: true
+    toc_depth: 3
+    number_sections: false
+    theme: cosmo
+    highlight: tango  # specifies the syntax highlighting style
+    code_folding: show
+    code_download: true
 ---
 
 *The .Rmd and .html (alternatively the .pdf) should be uploaded in TUWEL
@@ -389,7 +402,7 @@ linear_model_rsme <- function(formula, data, partitions = 4) {
 ```
 
 *Please note: if `x <- 1; y <- 2` counts as two lines, we have taken the
-liberty* *to say that:*
+liberty to say that:*
 
 ``` r
 interval <- (1 + i * nrow(data) / partitions):
