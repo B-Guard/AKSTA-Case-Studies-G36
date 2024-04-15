@@ -494,6 +494,7 @@ kwtest <- function (x, g, ...)
 #### a.
 Write a pseudo code outlining what the function does.
 
+```
 DEFINE function kwtest with inputs (x, g, ...)
   IF x is a list THEN
     IF length of x is less than 2 THEN
@@ -543,6 +544,7 @@ DEFINE function kwtest with inputs (x, g, ...)
     description "Kruskal-Wallis rank sum test" under the name "method"
   RETURN RVAL
 END FUNCTION
+```
 
 #### b. 
 For example data, call the function in two ways: once using x as a list and once 
