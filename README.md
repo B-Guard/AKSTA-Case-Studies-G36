@@ -16,3 +16,28 @@ This case study is divied into six parts. It seems they are not equal in *effort
     - [ ] Measuring and improving performance
 
 
+## Case Study 2
+
+[Exercise sheet](/exerciseSheets/CS2_question.pdf)
+
+Workload distribution:
+- Block 1
+    - [ ] a)
+    - [ ] b)
+    - [ ] c)
+    - [ ] d)
+    - [ ] e)
+    - [ ] f)
+- Block 2
+    - [ ] g)
+    - [ ] h)
+    - [ ] i)
+    - [ ] j)
+    - [ ] k)
+    - [ ] l)
+- Block 3
+    - [ ] m)
+    - [ ] n)
+    - [ ] o)
+    - [ ] p)
+    - [ ] q)
