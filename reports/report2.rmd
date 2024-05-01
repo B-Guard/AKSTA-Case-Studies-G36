@@ -21,6 +21,18 @@ output:
     code_download: true
 ---
 
+```{r, include=FALSE}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(readxl)
+library(httr)
+library(rvest)
+
+```
+
+
+
 <!-- Feel free to modify the subsection names -->
 
 
@@ -37,22 +49,129 @@ In this case study you will work with world data from 2020 which contains inform
 - net migration rate (difference between the number of persons entering and leaving a country during the year per 1,000 persons - based on midyear population)
 
 for most world entities. The data was downloaded from https://www.cia.gov/the-world-factbook/about/archives/.
-For data manipulation, dplyr functions should be used. For importing data, any package can be used.
+For data manipulation, `dplyr` functions should be used. For importing data, any package can be used.
 
 
 # Tasks
 
 ## a) Data loading
+<!-- Load in R the following data sets which you can find in TUWEL. For each data set, ensure that missing
+values are read in properly, that column names are unambiguous. Each data set should contain at the end
+only two columns: country and the variable.
+- rawdata_343.txt which contains the (estimated) median age per country. Pay attention! The delimiter
+is 2 or more white spaces (one space would not work as it would separate country names which contain
+a space); you have to skip the first two lines. Hint: you can look into function read.fwf or the readr
+corresponding function. It might also be useful to use tidyr functions to unite some columns back or
+separate them.
+- rawdata_373.csv which contains the (estimated) youth unemployment rate (15-24) per country
+- rawdata_347.txt which contains (estimated) net migration rate per country. -->
+```{r, message=FALSE}
+data343_location <- "../data/rawdata_343.txt"
+data373_location <- "../data/rawdata_373.csv"
+data347_location <- "../data/rawdata_347.txt"
+
+# Load data
+# Define the widths of the fields
+pos343 <- fwf_positions(start = c(9, 75), end = c(74, 79))
+pos347 <- fwf_positions(start = c(9, 72), end = c(71, 79))
+
+# Read files into dataframes
+rawdata_343 <- read_fwf(data343_location, col_positions = pos343)
+rawdata_373 <- read_csv(data373_location)
+rawdata_347 <- read_fwf(data347_location, col_positions = pos347)
+# Drop first 2 rows
+rawdata_343 <- rawdata_343[-c(1, 2), ]
+rawdata_347 <- rawdata_347[-c(1, 2), ]
+
+# Set the column names
+colnames(rawdata_343) <- c("country_name", "median_age")
+colnames(rawdata_347) <- c("country_name", "net_migration_rate")
+```
 
 ## b) Merging datasets
+<!-- Merge the data sets containing raw data using dplyr function on the unique keys. Keep the union of all
+observations in the tables. What key are you using for merging? Return the dimension of the merged data
+set. -->
+```{r}
+# Merge the data sets
+rawdata <- merge(rawdata_343, rawdata_347, by = "country_name", all = TRUE)
+rawdata <- merge(rawdata, rawdata_373, by = "country_name", all = TRUE)
+
+# Return the dimension of the merged data set
+print(dim(rawdata))
+```
+
 
 ## c) External info extraction
+<!-- You will acquire more country level information such as the classification of the country based on income.
+Such an information can be found at https://datahelpdesk.worldbank.org/knowledgebase/articles/906519.
+From there extract the classification for 2020 into low/lower-middle/upper-middle/high income countries. -->
+```{r, message=FALSE}
+# Read the xlsx file
+income_classification <- read_excel("../data/OGHIST.xlsx", sheet = "Country Analytical History")
+# Extract relevant information. That is:
+# All elements from the 11th row and the column which at the 5th row has value 2020
+# And the respective country name, which is on the 2nd column
+country_classification <- income_classification[11:228, c(1, 2, which(income_classification[5, ] == 2020))]
+colnames(country_classification) <- c("country_code", "country_name", "income_status")
+```
+
 
 ## d) Merging yet again
+<!-- Merge this information to the data set in b.
+1. What are the common variables? Can you merge using them? Why or why not?
+2. A reliable merging for countries are ISO codes as they are standardized across data sources. Download the
+mapping of ISO codes to countries from https://www.cia.gov/the-world-factbook/references/country-data-codes/ 
+and load it into R.
+3. Merge the data sets using the ISO codes. -->
+```{r, message=FALSE}
+# Merge the data sets
+rawdata_wrong <- merge(rawdata, country_classification, by = "country_name", all = TRUE)
+
+# Load country codes
+raw_ccodes <- read_csv("../data/Country Data Codes.csv")
+
+# Join raw_ccodes by Name with rawdata by country_name
+# From raw_ccode, get only GENC column
+rawdata <- left_join(rawdata, raw_ccodes[, c("Name", "GENC")], by = c("country_name" = "Name"))
+
+# Now join can be done by country_code
+rawdata <- left_join(rawdata, country_classification[, c("country_code", "income_status")], by = c("GENC" = "country_code"))
+```
 
 ## e) More external info introduction
+<!-- Introduce into the data set information on continent for each country and subcontinent (region). You should
+find a way to gather this data. You can find an appropriate online resource, download the data and merge
+the information with the existing data set. Name the merged data set df_vars. -->
+```{r, message=FALSE}
+continent_table_web <- "https://statisticstimes.com/geography/countries-by-continents.php"
+
+# Read the html
+response <- httr::GET(continent_table_web) 
+continent_table <- content(response, as="text") %>%
+  rvest::read_html() %>%
+  rvest::html_nodes("#table_id") %>%
+  rvest::html_table(na.strings = "")
+# Extract to a table
+continent_table <- continent_table[[1]]
+
+# Add information of continent, region and sub-region to the rawdata
+# Join by ISO-alpha3 Code and GENC
+df_vars <- left_join(rawdata, continent_table[, c("ISO-alpha3 Code", "Continent", "Region 1", "Region 2")], by = c("GENC" = "ISO-alpha3 Code"))
+```
+
 
 ## f) Discuss tidyness
+<!-- Discuss on the tidyness of the data set df_vars. What are the observational 
+units, what are the variables?
+What can be considered fixed vs measured variables? Tidy the data if needed. -->
+It can be said that the dataframe is already tidy. This is because each row represents 
+a country and each column represents a variable. Variables are the country name, 
+median age, net migration rate, youth unemployment rate, income status classification, 
+continent, region and sub-region. The observational units, or samples, are the countries. 
+All *fixed* variables are categorical. They are: <u>country_name</u>, <u>GENC</u>, 
+<u>Continent</u>, <u>Region 1</u> and <u>Region 2</u>. The measured variables are 
+<u>median_age</u>, <u>net_migration_rate</u>, <u>youth_unempl_rate</u> and <u>income_status</u>.
 
 ## g) Frequency table
 
