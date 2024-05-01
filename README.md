@@ -22,12 +22,12 @@ This case study is divied into six parts. It seems they are not equal in *effort
 
 Workload distribution:
 - Block 1
-    - [ ] a)
-    - [ ] b)
-    - [ ] c)
-    - [ ] d)
-    - [ ] e)
-    - [ ] f)
+    - [x] a)
+    - [x] b)
+    - [x] c)
+    - [x] d)
+    - [x] e)
+    - [x] f)
 - Block 2
     - [ ] g)
     - [ ] h)
