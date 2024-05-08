@@ -13,7 +13,7 @@ This case study is divied into six parts. It seems they are not equal in *effort
     - [x] Game of craps
     - [x] Readable and efficient code
 - Block 3:
-    - [ ] Measuring and improving performance
+    - [x] Measuring and improving performance
 
 
 ## Case Study 2
@@ -29,12 +29,12 @@ Workload distribution:
     - [x] e)
     - [x] f)
 - Block 2
-    - [ ] g)
-    - [ ] h)
-    - [ ] i)
-    - [ ] j)
-    - [ ] k)
-    - [ ] l)
+    - [x] g)
+    - [x] h)
+    - [x] i)
+    - [x] j)
+    - [x] k)
+    - [x] l)
 - Block 3
     - [ ] m)
     - [ ] n)

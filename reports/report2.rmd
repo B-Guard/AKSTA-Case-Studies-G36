@@ -28,33 +28,36 @@ library(tidyr)
 library(readxl)
 library(httr)
 library(rvest)
-
 ```
-
-
 
 <!-- Feel free to modify the subsection names -->
 
-
 # Data
 
-The CIA World Factbook provides basic intelligence on the history, people, government, economy, energy,
-geography, environment, communications, transportation, military, terrorism, and transnational issues for
-266 world entities.
+The CIA World Factbook provides basic intelligence on the history,
+people, government, economy, energy, geography, environment,
+communications, transportation, military, terrorism, and transnational
+issues for 266 world entities.
 
-In this case study you will work with world data from 2020 which contains information on
+In this case study you will work with world data from 2020 which
+contains information on
 
-- median age
-- youth unemployment rate
-- net migration rate (difference between the number of persons entering and leaving a country during the year per 1,000 persons - based on midyear population)
+-   median age
+-   youth unemployment rate
+-   net migration rate (difference between the number of persons
+    entering and leaving a country during the year per 1,000 persons -
+    based on midyear population)
 
-for most world entities. The data was downloaded from https://www.cia.gov/the-world-factbook/about/archives/.
-For data manipulation, `dplyr` functions should be used. For importing data, any package can be used.
-
+for most world entities. The data was downloaded from
+<https://www.cia.gov/the-world-factbook/about/archives/>. For data
+manipulation, `dplyr` functions should be used. For importing data, any
+package can be used.
 
 # Tasks
 
 ## a) Data loading
+
+```{=html}
 <!-- Load in R the following data sets which you can find in TUWEL. For each data set, ensure that missing
 values are read in properly, that column names are unambiguous. Each data set should contain at the end
 only two columns: country and the variable.
@@ -65,6 +68,7 @@ corresponding function. It might also be useful to use tidyr functions to unite 
 separate them.
 - rawdata_373.csv which contains the (estimated) youth unemployment rate (15-24) per country
 - rawdata_347.txt which contains (estimated) net migration rate per country. -->
+```
 ```{r, message=FALSE}
 data343_location <- "../data/rawdata_343.txt"
 data373_location <- "../data/rawdata_373.csv"
@@ -89,9 +93,12 @@ colnames(rawdata_347) <- c("country_name", "net_migration_rate")
 ```
 
 ## b) Merging datasets
+
+```{=html}
 <!-- Merge the data sets containing raw data using dplyr function on the unique keys. Keep the union of all
 observations in the tables. What key are you using for merging? Return the dimension of the merged data
 set. -->
+```
 ```{r}
 # Merge the data sets
 rawdata <- merge(rawdata_343, rawdata_347, by = "country_name", all = TRUE)
@@ -101,11 +108,13 @@ rawdata <- merge(rawdata, rawdata_373, by = "country_name", all = TRUE)
 print(dim(rawdata))
 ```
 
-
 ## c) External info extraction
+
+```{=html}
 <!-- You will acquire more country level information such as the classification of the country based on income.
 Such an information can be found at https://datahelpdesk.worldbank.org/knowledgebase/articles/906519.
 From there extract the classification for 2020 into low/lower-middle/upper-middle/high income countries. -->
+```
 ```{r, message=FALSE}
 # Read the xlsx file
 income_classification <- read_excel("../data/OGHIST.xlsx", sheet = "Country Analytical History")
@@ -116,14 +125,16 @@ country_classification <- income_classification[11:228, c(1, 2, which(income_cla
 colnames(country_classification) <- c("country_code", "country_name", "income_status")
 ```
 
-
 ## d) Merging yet again
+
+```{=html}
 <!-- Merge this information to the data set in b.
 1. What are the common variables? Can you merge using them? Why or why not?
 2. A reliable merging for countries are ISO codes as they are standardized across data sources. Download the
 mapping of ISO codes to countries from https://www.cia.gov/the-world-factbook/references/country-data-codes/ 
 and load it into R.
 3. Merge the data sets using the ISO codes. -->
+```
 ```{r, message=FALSE}
 # Merge the data sets
 rawdata_wrong <- merge(rawdata, country_classification, by = "country_name", all = TRUE)
@@ -140,9 +151,12 @@ rawdata <- left_join(rawdata, country_classification[, c("country_code", "income
 ```
 
 ## e) More external info introduction
+
+```{=html}
 <!-- Introduce into the data set information on continent for each country and subcontinent (region). You should
 find a way to gather this data. You can find an appropriate online resource, download the data and merge
 the information with the existing data set. Name the merged data set df_vars. -->
+```
 ```{r, message=FALSE}
 continent_table_web <- "https://statisticstimes.com/geography/countries-by-continents.php"
 
@@ -158,34 +172,190 @@ continent_table <- continent_table[[1]]
 # Add information of continent, region and sub-region to the rawdata
 # Join by ISO-alpha3 Code and GENC
 df_vars <- left_join(rawdata, continent_table[, c("ISO-alpha3 Code", "Continent", "Region 1", "Region 2")], by = c("GENC" = "ISO-alpha3 Code"))
+df_vars <- rename(df_vars, Region_1=`Region 1`, Region_2=`Region 2`)
 ```
 
-
 ## f) Discuss tidyness
+
+```{=html}
 <!-- Discuss on the tidyness of the data set df_vars. What are the observational 
 units, what are the variables?
 What can be considered fixed vs measured variables? Tidy the data if needed. -->
-It can be said that the dataframe is already tidy. This is because each row represents 
-a country and each column represents a variable. Variables are the country name, 
-median age, net migration rate, youth unemployment rate, income status classification, 
-continent, region and sub-region. The observational units, or samples, are the countries. 
-All *fixed* variables are categorical. They are: <u>country_name</u>, <u>GENC</u>, 
-<u>Continent</u>, <u>Region 1</u> and <u>Region 2</u>. The measured variables are 
-<u>median_age</u>, <u>net_migration_rate</u>, <u>youth_unempl_rate</u> and <u>income_status</u>.
+```
+It can be said that the dataframe is already tidy. This is because each
+row represents a country and each column represents a variable.
+Variables are the country name, median age, net migration rate, youth
+unemployment rate, income status classification, continent, region and
+sub-region. The observational units, or samples, are the countries. All
+*fixed* variables are categorical. They are: <u>country_name</u>,
+<u>GENC</u>, <u>Continent</u>, <u>Region 1</u> and <u>Region 2</u>. The
+measured variables are <u>median_age</u>, <u>net_migration_rate</u>,
+<u>youth_unempl_rate</u> and <u>income_status</u>.
 
 ## g) Frequency table
 
+<!-- Make a frequency table for the status variable in the merged data set. Briefly comment on the results. -->
+
+```{r, message=FALSE}
+df_vars %>% 
+  group_by(income_status) %>%
+  summarise(n = n())
+```
+
+Among the identified income statuses:
+
+-   **High income (H)**: This is the most common income status, with 79
+    countries falling into this category.
+-   **Lower middle income (LM)**: This is the second most common income
+    status, with 54 countries falling into this category.
+-   **Upper middle income (UM)**: This is the third most common income
+    status, with 52 countries falling into this category.
+-   **Low income (L)**: This is the least common income status, with
+    only 27 countries falling into this category.
+-   Missing values: There are 15 countries for which we have no
+    information about income status.
+
+The distribution suggests a hierarchy, with a larger number of countries
+classified as high income, followed by lower middle income, upper middle
+income, and finally low income.
+
 ## h) Distribution of income status per continent
+
+```{=html}
+<!-- What is the distribution of income status in the different continents? Compute the absolute frequencies as
+well as the relative frequency of status within each continent. Briefly comment on the results. -->
+```
+```{r, message=FALSE}
+freqs <- df_vars %>%
+  group_by(Continent, income_status) %>%
+  summarize(absolute_frequency = n()) %>%
+  group_by(Continent) %>%
+  mutate(relative_frequency = absolute_frequency / sum(absolute_frequency) * 100)
+
+print(freqs)
+```
+
+Observations:
+
+-   **Africa**: The majority of countries fall into the lower-middle
+    (42%) and low-income (42%) categories, with a relatively smaller
+    proportion in the upper-middle (13%) and high-income (2%)
+    categories.
+
+-   **Asia**: There is a diverse distribution across income categories,
+    with significant representation in the high-income, the lower-middle
+    and upper-middle income categories. Only 8% of the countries in Asia
+    are in the low-income category.
+
+-   **Europe**: The majority of European countries are classified as
+    high-income (71%), reflecting the economic development and stability
+    of many European nations. However, there are also some countries in
+    the lower-middle and upper-middle income categories. There are no
+    countries in the low-income category.
+
+-   **North America**: The distribution is relatively balanced across
+    income categories, with notable representation in all categories,
+    even though the most significant category is the high-income
+    countries (47%).
+
+-   **Oceania**: Similar to North America, there is a diverse
+    distribution across income categories in Oceania. While high-income
+    countries are well-represented, there are also countries in the
+    lower-middle and upper-middle income categories.
+
+-   **South America**: The majority of South American countries fall
+    into the upper-middle income category (67%), with fewer countries
+    classified as low-middle income (8%).
 
 ## i) Identify "lone" countries
 
-## j) Number of subregions
+```{=html}
+<!-- From h. identify the countries which are the only ones in their respective group. Explain in few words the
+output. -->
+```
+```{r, message=FALSE}
+# Filter countries that are the only ones in their respective income status group within each continent
+unique_countries <- freqs %>%
+  filter(absolute_frequency == 1, !is.na(Continent), !is.na(income_status))
+
+print(semi_join(df_vars, unique_countries))
+```
+
+These results indicate the countries that are the sole representatives
+of their respective income status groups within each continent:
+
+1.  **Bolivia**:
+    -   **Continent**: South America
+    -   **Income Status**: Lower middle income (LM)
+    -   **Explanation**: This suggests that Bolivia is the poorest
+        country in South America.
+2.  **Seychelles**:
+    -   **Continent**: Africa
+    -   **Income Status**: High income (H)
+    -   **Explanation**: Seychelles stands out as the only high-income
+        country within the continent of Africa. This highlights its
+        relatively high level of economic development compared to other
+        African nations.
+3.  **Ukraine**:
+    -   **Continent**: Europe
+    -   **Income Status**: Lower middle income (LM)
+    -   **Explanation**: This suggests that Ukraine is the poorest
+        country in Europe.
+
+## j) Number of sub-regions
+
+```{=html}
+<!-- For each continent count the number of sub-regions in the data set. How granular are the subcontinents that
+you employ in the analysis? -->
+```
+```{r, message=FALSE}
+# Group by continent and count the number of unique sub-regions
+subregion_counts <- df_vars %>%
+  group_by(Continent) %>%
+  summarize(
+    num_subregions_1 = n_distinct(Region_1),
+    num_subregions_2 = n_distinct(Region_2)
+  )
+
+print(subregion_counts)
+```
+We observe that Africa exhibits the highest level of granularity among the continents, characterized by the most sub-regions present at both a less granular level (Region 1) and a more detailed level (Region 2). Europe and North America display a moderate level of granularity, with 4 and 3 first-level sub-regions respectively, and 2 second-level sub-regions each. In contrast, South America shows the least granularity, with only 1 sub-region present at both the first and second levels.
 
 ## k) Distribution of income status per sub-region
 
+```{=html}
+<!-- Look at the frequency distribution of income status in the subregions of Nort- and South-Americas. Comment
+on the results. -->
+```
+```{r, message=FALSE}
+# Filter the dataframe for subregions of North and South Americas, 
+# group by subregions and calculate the frequency distribution of income status
+subregion_income <- df_vars %>%
+  filter(Continent %in% c("North America", "South America"), !is.na(income_status)) %>%
+  group_by(Continent, Region_1, Region_2, income_status) %>%
+  summarize(count = n())
+
+print(subregion_income)
+```
+We observe a notable disparity in income status between North American and South American countries within the shared region of Latin America and the Caribbean. In North America, high-income countries dominate, with 14 instances, followed by upper-middle-income countries totaling 11 (7+4), and lastly, lower-middle-income countries with 5 (1+4) cases. Conversely, in South America, the distribution is distinct, with upper-middle-income countries prevailing at 8, compared to only 2 high-income countries. This divergence underscores significant differences in economic profiles between the two continents, even within the same regional context.
+
 ## l) Deeper into income status in America
 
-## m) Table of average values 
+```{=html}
+<!-- Dig deeper into the low-middle income countries of the Americas. Which ones are they? Are they primarily
+small island states in the Caribbean? Comment. -->
+```
+```{r, message=FALSE}
+# Filter the dataframe for subregions of North and South Americas, 
+# group by subregions and calculate the frequency distribution of income status
+lowincome_subregions <- df_vars %>%
+  filter(Continent %in% c("North America", "South America"), income_status == "LM")
+
+print(lowincome_subregions)
+```
+The low-middle income countries of the Americas include Belize, Bolivia, El Salvador, Haiti, Honduras, and Nicaragua. These countries are primarily located in Central America and the Caribbean. While some of these countries are indeed small island states in the Caribbean, such as Haiti, others like Belize, El Salvador, Honduras, and Nicaragua are part of Central America. This indicates that the classification of low-middle income is not exclusive to small island states but also applies to countries within the Central American region.
+
+## m) Table of average values
 
 ## n) Table of std-dev values
 
@@ -194,4 +364,5 @@ All *fixed* variables are categorical. They are: <u>country_name</u>, <u>GENC</u
 ## p) Identify countries doing "well"
 
 <!-- The ex. sheet names this r), but there is no previous q -->
+
 ## q) Export all to csv
