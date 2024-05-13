@@ -36,8 +36,8 @@ Workload distribution:
     - [x] k)
     - [x] l)
 - Block 3
-    - [ ] m)
-    - [ ] n)
-    - [ ] o)
-    - [ ] p)
-    - [ ] q)
+    - [x] m)
+    - [x] n)
+    - [x] o)
+    - [x] p)
+    - [x] q)
