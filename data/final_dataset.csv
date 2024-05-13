@@ -1,0 +1,228 @@
+country_name;median_age;net_migration_rate;youth_unempl_rate;GENC;income_status;Continent;Region_1;Region_2
+Afghanistan;19.5;-0.1;17.6;AFG;L;Asia;Southern Asia;.
+Albania;34.3;-3.3;31.9;ALB;UM;Europe;Southern Europe;.
+Algeria;28.9;-0.9;39.3;DZA;LM;Africa;Northern Africa;.
+American Samoa;27.2;-26.1;.;ASM;UM;Oceania;Polynesia;.
+Andorra;46.2;0;.;AND;H;Europe;Southern Europe;.
+Angola;15.9;-0.2;39.4;AGO;LM;Africa;Middle Africa;Sub-Saharan Africa
+Anguilla;35.7;11.1;.;AIA;.;North America;Caribbean;Latin America and the Caribbean
+Antigua and Barbuda;32.7;2.1;.;ATG;H;North America;Caribbean;Latin America and the Caribbean
+Argentina;32.4;-0.1;23.7;ARG;UM;South America;South America;Latin America and the Caribbean
+Armenia;36.6;-5.5;36.3;ARM;UM;Asia;Western Asia;.
+Aruba;39.9;8.4;.;ABW;H;North America;Caribbean;Latin America and the Caribbean
+Australia;37.5;8.1;11.8;AUS;H;Oceania;Australia and New Zealand;.
+Austria;44.5;3.6;9.4;AUT;H;Europe;Western Europe;.
+Azerbaijan;32.6;0;13.4;AZE;UM;Asia;Western Asia;.
+Bahamas, The;32.8;0;25.8;BHS;H;North America;Caribbean;Latin America and the Caribbean
+Bahrain;32.9;10.6;5.3;BHR;H;Asia;Western Asia;.
+Bangladesh;27.9;-3;12.8;BGD;LM;Asia;Southern Asia;.
+Barbados;39.5;-0.3;29.6;BRB;H;North America;Caribbean;Latin America and the Caribbean
+Belarus;40.9;0.7;10.6;BLR;UM;Europe;Eastern Europe;.
+Belgium;41.6;4.8;15.8;BEL;H;Europe;Western Europe;.
+Belize;23.9;-1;15.3;BLZ;LM;North America;Central America;Latin America and the Caribbean
+Benin;17;0.3;5.6;BEN;LM;Africa;Western Africa;Sub-Saharan Africa
+Bermuda;43.6;1.6;29.3;BMU;H;North America;Northern America;.
+Bhutan;29.1;0;10.7;BTN;LM;Asia;Southern Asia;.
+Bolivia;25.3;-0.3;6.9;BOL;LM;South America;South America;Latin America and the Caribbean
+Bosnia and Herzegovina;43.3;-0.4;33.8;BIH;UM;Europe;Southern Europe;.
+Botswana;25.7;2.9;36;BWA;UM;Africa;Southern Africa;Sub-Saharan Africa
+Brazil;33.2;-0.1;28.5;BRA;UM;South America;South America;Latin America and the Caribbean
+British Virgin Islands;37.2;15.5;.;VGB;H;North America;Caribbean;Latin America and the Caribbean
+Brunei;31.1;2.3;28.9;BRN;H;Asia;South-eastern Asia;.
+Bulgaria;43.7;-0.3;12.7;BGR;UM;Europe;Eastern Europe;.
+Burkina Faso;17.9;-0.6;8.7;BFA;L;Africa;Western Africa;Sub-Saharan Africa
+Burma;29.2;-1.4;2;MMR;LM;Asia;South-eastern Asia;.
+Burundi;17.7;-0.8;2.9;BDI;L;Africa;Eastern Africa;Sub-Saharan Africa
+Cabo Verde;26.8;-0.6;27.8;CPV;LM;Africa;Western Africa;Sub-Saharan Africa
+Cambodia;26.4;-0.3;1.1;KHM;LM;Asia;South-eastern Asia;.
+Cameroon;18.5;-0.3;6.3;CMR;LM;Africa;Middle Africa;Sub-Saharan Africa
+Canada;41.8;5.6;11.1;CAN;H;North America;Northern America;.
+Cayman Islands;40.5;13;13.8;CYM;H;North America;Caribbean;Latin America and the Caribbean
+Central African Republic;20;0;.;CAF;L;Africa;Middle Africa;Sub-Saharan Africa
+Chad;16.1;-0.1;.;TCD;L;Africa;Middle Africa;Sub-Saharan Africa
+Chile;35.5;0.3;18.1;CHL;H;South America;South America;Latin America and the Caribbean
+China;38.4;-0.4;.;CHN;UM;Asia;Eastern Asia;.
+Colombia;31.2;-0.6;18.5;COL;UM;South America;South America;Latin America and the Caribbean
+Comoros;20.9;-2.3;19.5;COM;LM;Africa;Eastern Africa;Sub-Saharan Africa
+Congo, Democratic Republic of the;16.7;-0.9;8.7;COD;L;Africa;Middle Africa;Sub-Saharan Africa
+Congo, Republic of the;19.5;-0.9;.;COG;LM;Africa;Middle Africa;Sub-Saharan Africa
+Cook Islands;38.3;-29.9;.;COK;.;Oceania;Polynesia;.
+Costa Rica;32.6;0.8;20.6;CRI;UM;North America;Central America;Latin America and the Caribbean
+Cote d'Ivoire;20.3;1.2;5.5;CIV;LM;Africa;Western Africa;Sub-Saharan Africa
+Croatia;43.9;-1;23.7;HRV;H;Europe;Southern Europe;.
+Cuba;42.1;-3.7;6.1;CUB;UM;North America;Caribbean;Latin America and the Caribbean
+Curacao;36.7;-1.3;29.3;CUW;H;North America;Caribbean;Latin America and the Caribbean
+Cyprus;37.9;7.6;20.2;CYP;H;Asia;Western Asia;.
+Czechia;43.3;2.3;6.7;CZE;H;Europe;Eastern Europe;.
+Denmark;42;2.8;9.4;DNK;H;Europe;Northern Europe;.
+Djibouti;24.9;5.1;.;DJI;LM;Africa;Eastern Africa;Sub-Saharan Africa
+Dominica;34.9;-5.3;.;DMA;UM;North America;Caribbean;Latin America and the Caribbean
+Dominican Republic;27.9;-2.7;13.5;DOM;UM;North America;Caribbean;Latin America and the Caribbean
+Ecuador;28.8;0;7.9;ECU;UM;South America;South America;Latin America and the Caribbean
+Egypt;24.1;-0.3;29.6;EGY;LM;Africa;Northern Africa;.
+El Salvador;27.7;-4.8;9.6;SLV;LM;North America;Central America;Latin America and the Caribbean
+Equatorial Guinea;20.3;0;.;GNQ;UM;Africa;Middle Africa;Sub-Saharan Africa
+Eritrea;20.3;-11.6;.;ERI;L;Africa;Eastern Africa;Sub-Saharan Africa
+Estonia;43.7;-3.1;11.8;EST;H;Europe;Northern Europe;.
+Eswatini;23.7;-6.8;47.1;SWZ;LM;Africa;Southern Africa;Sub-Saharan Africa
+Ethiopia;19.8;-0.2;25.2;ETH;L;Africa;Eastern Africa;Sub-Saharan Africa
+Faroe Islands;37.2;0;.;FRO;H;Europe;Northern Europe;.
+Fiji;29.9;-6.2;15.4;FJI;UM;Oceania;Melanesia;.
+Finland;42.8;2.6;17;FIN;H;Europe;Northern Europe;.
+France;41.7;1.1;20.8;FRA;H;Europe;Western Europe;.
+French Polynesia;33.3;-0.7;56.7;PYF;H;Oceania;Polynesia;.
+Gabon;21;3.9;35.7;GAB;UM;Africa;Middle Africa;Sub-Saharan Africa
+Gambia, The;21.8;-1.6;13.1;GMB;L;Africa;Western Africa;Sub-Saharan Africa
+Gaza Strip;18;-4.7;42.2;XGZ;.;.;.;.
+Georgia;38.6;0.1;29.9;GEO;UM;Asia;Western Asia;.
+Germany;47.8;1.5;6.2;DEU;H;Europe;Western Europe;.
+Ghana;21.4;-1.6;9.1;GHA;LM;Africa;Western Africa;Sub-Saharan Africa
+Gibraltar;35.5;-3.3;.;GIB;H;Europe;Southern Europe;.
+Greece;45.3;0.9;39.9;GRC;H;Europe;Southern Europe;.
+Greenland;34.3;-6;.;GRL;H;North America;Northern America;.
+Grenada;33.3;-2.6;.;GRD;UM;North America;Caribbean;Latin America and the Caribbean
+Guam;29.4;-11;29.4;GUM;H;Oceania;Micronesia;.
+Guatemala;23.2;-1.7;5;GTM;UM;North America;Central America;Latin America and the Caribbean
+Guernsey;44.3;1.9;.;GGY;.;Europe;Northern Europe;Channel Islands
+Guinea;19.1;0;1;GIN;L;Africa;Western Africa;Sub-Saharan Africa
+Guinea-Bissau;18;-3.8;.;GNB;L;Africa;Western Africa;Sub-Saharan Africa
+Guyana;27.5;0;21.5;GUY;UM;South America;South America;Latin America and the Caribbean
+Haiti;24.1;-1.9;.;HTI;LM;North America;Caribbean;Latin America and the Caribbean
+Honduras;24.4;-1.4;10.7;HND;LM;North America;Central America;Latin America and the Caribbean
+Hong Kong;45.6;1.7;8.7;HKG;H;Asia;Eastern Asia;.
+Hungary;43.6;1.3;10.2;HUN;H;Europe;Eastern Europe;.
+Iceland;37.1;3.3;6.1;ISL;H;Europe;Northern Europe;.
+India;28.7;0;22.5;IND;LM;Asia;Southern Asia;.
+Indonesia;31.1;-1.1;16.5;IDN;LM;Asia;South-eastern Asia;.
+Iran;31.7;-0.3;27.6;IRN;LM;Asia;Southern Asia;.
+Iraq;21.2;-0.5;25.6;IRQ;UM;Asia;Western Asia;.
+Ireland;37.8;3.9;13.8;IRL;H;Europe;Northern Europe;.
+Isle of Man;44.6;5.2;10.1;IMN;H;Europe;Northern Europe;.
+Israel;30.4;2.1;7.2;ISR;H;Asia;Western Asia;.
+Italy;46.5;3.2;32.2;ITA;H;Europe;Southern Europe;.
+Jamaica;29.4;-9.4;24.2;JAM;UM;North America;Caribbean;Latin America and the Caribbean
+Japan;48.6;0;3.6;JPN;H;Asia;Eastern Asia;.
+Jersey;37.5;2.3;.;JEY;.;Europe;Northern Europe;Channel Islands
+Jordan;23.5;-11.3;35.6;JOR;UM;Asia;Western Asia;.
+Kazakhstan;31.6;0.4;3.8;KAZ;UM;Asia;Central Asia;.
+Kenya;20;-0.2;7.4;KEN;LM;Africa;Eastern Africa;Sub-Saharan Africa
+Kiribati;25.7;-2.8;17.1;KIR;LM;Oceania;Micronesia;.
+Korea, North;34.6;0;.;PRK;L;Asia;Eastern Asia;.
+Korea, South;43.2;2.3;10.2;KOR;H;Asia;Eastern Asia;.
+Kosovo;30.5;-1.8;55.4;XKS;.;.;.;.
+Kuwait;29.7;-3.3;15.4;KWT;H;Asia;Western Asia;.
+Kyrgyzstan;27.3;-5;14.2;KGZ;LM;Asia;Central Asia;.
+Laos;24;-1;18.2;LAO;LM;Asia;South-eastern Asia;.
+Latvia;44.4;-5.9;12.2;LVA;H;Europe;Northern Europe;.
+Lebanon;33.7;-88.7;.;LBN;UM;Asia;Western Asia;.
+Lesotho;24.7;-6.1;34.4;LSO;LM;Africa;Southern Africa;Sub-Saharan Africa
+Liberia;18;-2.9;2.3;LBR;L;Africa;Western Africa;Sub-Saharan Africa
+Libya;25.8;-0.7;48.7;LBY;UM;Africa;Northern Africa;.
+Liechtenstein;43.7;4.9;.;LIE;H;Europe;Western Europe;.
+Lithuania;44.5;-5.9;11.1;LTU;H;Europe;Northern Europe;.
+Luxembourg;39.5;13.3;14.2;LUX;H;Europe;Western Europe;.
+Macau;40.8;3.3;5.3;MAC;H;Asia;Eastern Asia;.
+Macedonia;39;0.4;45.4;.;.;Europe;Northern Europe;Channel Islands
+Madagascar;20.3;0;1;MDG;L;Africa;Eastern Africa;Sub-Saharan Africa
+Malawi;16.8;0;40.5;MWI;L;Africa;Eastern Africa;Sub-Saharan Africa
+Malaysia;29.2;-0.3;10.5;MYS;UM;Asia;South-eastern Asia;.
+Maldives;29.5;-12.7;15.9;MDV;UM;Asia;Southern Asia;.
+Mali;16;-3.9;16.9;MLI;L;Africa;Western Africa;Sub-Saharan Africa
+Malta;42.3;6.6;9.1;MLT;H;Europe;Southern Europe;.
+Marshall Islands;23.8;-4.5;11;MHL;UM;Oceania;Micronesia;.
+Mauritania;21;-0.8;15.2;MRT;LM;Africa;Western Africa;Sub-Saharan Africa
+Mauritius;36.3;0;23.9;MUS;UM;Africa;Eastern Africa;Sub-Saharan Africa
+Mexico;29.3;-1.9;6.9;MEX;UM;North America;Central America;Latin America and the Caribbean
+Micronesia, Federated States of;26.3;-20.9;18.9;FSM;LM;Oceania;Micronesia;.
+Moldova;37.7;-9;7.4;MDA;UM;Europe;Eastern Europe;.
+Monaco;55.4;8.3;26.6;MCO;H;Europe;Western Europe;.
+Mongolia;29.8;-0.8;16.8;MNG;LM;Asia;Eastern Asia;.
+Montenegro;39.6;-4.9;29.4;MNE;UM;Europe;Southern Europe;.
+Montserrat;34.8;0;.;MSR;.;North America;Caribbean;Latin America and the Caribbean
+Morocco;29.1;-1.9;22.2;MAR;LM;Africa;Northern Africa;.
+Mozambique;17;-1.7;7.4;MOZ;L;Africa;Eastern Africa;Sub-Saharan Africa
+Namibia;21.8;0;38;NAM;UM;Africa;Southern Africa;Sub-Saharan Africa
+Nauru;27;-11.3;26.6;NRU;H;Oceania;Micronesia;.
+Nepal;25.3;-3.1;21.4;NPL;LM;Asia;Southern Asia;.
+Netherlands;42.8;1.9;7.2;NLD;H;Europe;Western Europe;.
+New Caledonia;32.9;3.8;38.4;NCL;H;Oceania;Melanesia;.
+New Zealand;37.2;8;11.5;NZL;H;Oceania;Australia and New Zealand;.
+Nicaragua;27.3;-2.4;8.5;NIC;LM;North America;Central America;Latin America and the Caribbean
+Niger;14.8;-0.7;0.7;NER;L;Africa;Western Africa;Sub-Saharan Africa
+Nigeria;18.6;-0.2;13.8;NGA;LM;Africa;Western Africa;Sub-Saharan Africa
+Northern Mariana Islands;32.8;-15.4;.;MNP;H;Oceania;Micronesia;.
+Norway;39.5;4;9.7;NOR;H;Europe;Northern Europe;.
+Oman;26.2;-0.4;13.7;OMN;H;Asia;Western Asia;.
+Pakistan;22;-0.9;7.8;PAK;LM;Asia;Southern Asia;.
+Palau;33.9;0.9;5.6;PLW;H;Oceania;Micronesia;.
+Panama;30.1;-0.1;10.2;PAN;UM;North America;Central America;Latin America and the Caribbean
+Papua New Guinea;24;0;3.6;PNG;LM;Oceania;Melanesia;.
+Paraguay;29.7;-0.1;14.5;PRY;UM;South America;South America;Latin America and the Caribbean
+Peru;29.1;-1.8;14.7;PER;UM;South America;South America;Latin America and the Caribbean
+Philippines;24.1;-1.8;6.7;PHL;LM;Asia;South-eastern Asia;.
+Poland;41.9;-0.3;11.7;POL;H;Europe;Eastern Europe;.
+Portugal;44.6;0.3;20.3;PRT;H;Europe;Southern Europe;.
+Puerto Rico;43.6;-14.1;26.6;PRI;H;North America;Caribbean;Latin America and the Caribbean
+Qatar;33.7;6.5;0.4;QAT;H;Asia;Western Asia;.
+Romania;42.5;-0.2;16.2;ROU;UM;Europe;Eastern Europe;.
+Russia;40.3;1.7;17;RUS;UM;Europe;Eastern Europe;.
+Rwanda;19.7;-3.3;20.6;RWA;L;Africa;Eastern Africa;Sub-Saharan Africa
+Saint Barthelemy;45.6;-3;.;BLM;.;North America;Caribbean;Latin America and the Caribbean
+Saint Helena, Ascension, and Tristan da Cunha;43.2;0;.;SHN;.;Africa;Western Africa;Sub-Saharan Africa
+Saint Kitts and Nevis;36.5;1.2;.;KNA;H;North America;Caribbean;Latin America and the Caribbean
+Saint Lucia;36.9;-1.7;46.2;LCA;UM;North America;Caribbean;Latin America and the Caribbean
+Saint Martin;33.3;-6;.;MAF;H;North America;Caribbean;Latin America and the Caribbean
+Saint Pierre and Miquelon;48.5;-7.7;.;SPM;.;North America;Northern America;.
+Saint Vincent and the Grenadines;35.3;-7.2;.;VCT;UM;North America;Caribbean;Latin America and the Caribbean
+Samoa;25.6;-8.1;31.9;WSM;LM;Oceania;Polynesia;.
+San Marino;45.2;6.6;27.4;SMR;H;Europe;Southern Europe;.
+Sao Tome and Principe;19.3;-7.9;20.8;STP;LM;Africa;Middle Africa;Sub-Saharan Africa
+Saudi Arabia;30.8;4.7;28.8;SAU;H;Asia;Western Asia;.
+Senegal;19.4;-1.3;8.1;SEN;LM;Africa;Western Africa;Sub-Saharan Africa
+Serbia;43.4;0;29.7;SRB;UM;Europe;Southern Europe;.
+Seychelles;36.8;1;11.6;SYC;H;Africa;Eastern Africa;Sub-Saharan Africa
+Sierra Leone;19.1;-1.2;9.4;SLE;L;Africa;Western Africa;Sub-Saharan Africa
+Singapore;35.6;11.8;9.1;SGP;H;Asia;South-eastern Asia;.
+Sint Maarten;41.1;6;.;SXM;H;North America;Caribbean;Latin America and the Caribbean
+Slovakia;41.8;0.2;14.9;SVK;H;Europe;Eastern Europe;.
+Slovenia;44.9;1.5;8.8;SVN;H;Europe;Southern Europe;.
+Solomon Islands;23.5;-1.6;1.3;SLB;LM;Oceania;Melanesia;.
+Somalia;18.5;-3.8;.;SOM;L;Africa;Eastern Africa;Sub-Saharan Africa
+South Africa;28;-0.2;53.4;ZAF;UM;Africa;Southern Africa;Sub-Saharan Africa
+South Sudan;18.6;0.2;38.6;SSD;L;Africa;Eastern Africa;Sub-Saharan Africa
+Spain;43.9;7;34.3;ESP;H;Europe;Southern Europe;.
+Sri Lanka;33.7;-1.3;21;LKA;LM;Asia;Southern Asia;.
+Sudan;18.3;-0.4;.;SDN;L;Africa;Northern Africa;.
+Suriname;31;0.5;13.4;SUR;UM;South America;South America;Latin America and the Caribbean
+Sweden;41.1;5.2;16.8;SWE;H;Europe;Northern Europe;.
+Switzerland;42.7;4.6;7.9;CHE;H;Europe;Western Europe;.
+Syria;23.5;27.1;35.8;SYR;L;Asia;Western Asia;.
+Taiwan;42.3;0.8;.;TWN;H;.;.;.
+Tajikistan;25.3;-1.1;.;TJK;LM;Asia;Central Asia;.
+Tanzania;18.2;-0.4;3.9;TZA;LM;Africa;Eastern Africa;Sub-Saharan Africa
+Thailand;39;0;3.7;THA;UM;Asia;South-eastern Asia;.
+Timor-Leste;19.6;-3.9;13.2;TLS;LM;Asia;South-eastern Asia;.
+Togo;20;0;3.9;TGO;L;Africa;Western Africa;Sub-Saharan Africa
+Tonga;24.1;-17.9;.;TON;UM;Oceania;Polynesia;.
+Trinidad and Tobago;37.8;-5.4;8.7;TTO;H;North America;Caribbean;Latin America and the Caribbean
+Tunisia;32.7;-1.4;35;TUN;LM;Africa;Northern Africa;.
+Turkey;32.2;-4.3;20.2;.;.;Europe;Northern Europe;Channel Islands
+Turkmenistan;29.2;-1.7;.;TKM;UM;Asia;Central Asia;.
+Turks and Caicos Islands;34.6;8.9;.;TCA;H;North America;Caribbean;Latin America and the Caribbean
+Tuvalu;26.6;-6.5;20.6;TUV;UM;Oceania;Polynesia;.
+Uganda;15.7;-3.5;14.8;UGA;L;Africa;Eastern Africa;Sub-Saharan Africa
+Ukraine;41.2;2.3;17.9;UKR;LM;Europe;Eastern Europe;.
+United Arab Emirates;38.4;7.6;6.9;ARE;H;Asia;Western Asia;.
+United Kingdom;40.6;2.5;11.3;GBR;H;Europe;Northern Europe;.
+United States;38.5;3;8.6;USA;H;North America;Northern America;.
+Uruguay;35.5;-0.9;25.9;URY;H;South America;South America;Latin America and the Caribbean
+Uzbekistan;30.1;-1.9;.;UZB;LM;Asia;Central Asia;.
+Vanuatu;23;-1.3;.;VUT;LM;Oceania;Melanesia;.
+Venezuela;30;-3.4;14.6;VEN;.;South America;South America;Latin America and the Caribbean
+Vietnam;31.9;-0.3;6.9;VNM;LM;Asia;South-eastern Asia;.
+Virgin Islands;41.8;-7.5;.;VIR;H;North America;Caribbean;Latin America and the Caribbean
+Wallis and Futuna;34;-4.3;.;WLF;.;Oceania;Polynesia;.
+West Bank;21.9;-4.2;42.2;XWB;.;.;.;.
+Yemen;19.8;-0.2;24.5;YEM;L;Asia;Western Asia;.
+Zambia;16.9;0;24;ZMB;LM;Africa;Eastern Africa;Sub-Saharan Africa
+Zimbabwe;20.5;-5;16.5;ZWE;LM;Africa;Eastern Africa;Sub-Saharan Africa

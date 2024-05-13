@@ -319,7 +319,15 @@ subregion_counts <- df_vars %>%
 
 print(subregion_counts)
 ```
-We observe that Africa exhibits the highest level of granularity among the continents, characterized by the most sub-regions present at both a less granular level (Region 1) and a more detailed level (Region 2). Europe and North America display a moderate level of granularity, with 4 and 3 first-level sub-regions respectively, and 2 second-level sub-regions each. In contrast, South America shows the least granularity, with only 1 sub-region present at both the first and second levels.
+
+We observe that Africa exhibits the highest level of granularity among
+the continents, characterized by the most sub-regions present at both a
+less granular level (Region 1) and a more detailed level (Region 2).
+Europe and North America display a moderate level of granularity, with 4
+and 3 first-level sub-regions respectively, and 2 second-level
+sub-regions each. In contrast, South America shows the least
+granularity, with only 1 sub-region present at both the first and second
+levels.
 
 ## k) Distribution of income status per sub-region
 
@@ -337,7 +345,17 @@ subregion_income <- df_vars %>%
 
 print(subregion_income)
 ```
-We observe a notable disparity in income status between North American and South American countries within the shared region of Latin America and the Caribbean. In North America, high-income countries dominate, with 14 instances, followed by upper-middle-income countries totaling 11 (7+4), and lastly, lower-middle-income countries with 5 (1+4) cases. Conversely, in South America, the distribution is distinct, with upper-middle-income countries prevailing at 8, compared to only 2 high-income countries. This divergence underscores significant differences in economic profiles between the two continents, even within the same regional context.
+
+We observe a notable disparity in income status between North American
+and South American countries within the shared region of Latin America
+and the Caribbean. In North America, high-income countries dominate,
+with 14 instances, followed by upper-middle-income countries totaling 11
+(7+4), and lastly, lower-middle-income countries with 5 (1+4) cases.
+Conversely, in South America, the distribution is distinct, with
+upper-middle-income countries prevailing at 8, compared to only 2
+high-income countries. This divergence underscores significant
+differences in economic profiles between the two continents, even within
+the same regional context.
 
 ## l) Deeper into income status in America
 
@@ -353,16 +371,156 @@ lowincome_subregions <- df_vars %>%
 
 print(lowincome_subregions)
 ```
-The low-middle income countries of the Americas include Belize, Bolivia, El Salvador, Haiti, Honduras, and Nicaragua. These countries are primarily located in Central America and the Caribbean. While some of these countries are indeed small island states in the Caribbean, such as Haiti, others like Belize, El Salvador, Honduras, and Nicaragua are part of Central America. This indicates that the classification of low-middle income is not exclusive to small island states but also applies to countries within the Central American region.
+
+The low-middle income countries of the Americas include Belize, Bolivia,
+El Salvador, Haiti, Honduras, and Nicaragua. These countries are
+primarily located in Central America and the Caribbean. While some of
+these countries are indeed small island states in the Caribbean, such as
+Haiti, others like Belize, El Salvador, Honduras, and Nicaragua are part
+of Central America. This indicates that the classification of low-middle
+income is not exclusive to small island states but also applies to
+countries within the Central American region.
 
 ## m) Table of average values
 
+```{=html}
+<!-- Create a table of average values for median age, youth unemployment rate and net migration rate separated
+into income status. Make sure that in the output, the ordering of the income classes is proper (i.e., L, LM,
+UM, H or the other way around). Briefly comment the results. -->
+```
+```{r, message=FALSE}
+# Convert specified columns to numeric data types to ensure accurate calculations
+processed_df_vars <- df_vars %>%
+  mutate_at(vars(median_age, youth_unempl_rate, net_migration_rate), as.numeric)
+
+# Calculate the average values for median age, youth unemployment rate, and net migration rate grouped by income status
+average_values <- processed_df_vars %>%
+  group_by(income_status) %>%
+  summarise(
+    average_median_age = mean(median_age, na.rm = TRUE),
+    average_youth_unemployment_rate = mean(youth_unempl_rate, na.rm = TRUE),
+    average_net_migration_rate = mean(net_migration_rate, na.rm = TRUE)
+  ) %>%
+  mutate(income_status = factor(income_status, levels = c("L", "LM", "UM", "H"))) %>%
+  arrange(income_status)
+
+print(average_values)
+```
+
+The data reveals increasing median ages correlating with higher income
+levels, indicating older populations in wealthier nations. Youth
+unemployment is highest in upper-middle-income countries, suggesting
+economic challenges for the young workforce there. Net migration rates
+are negative in lower and upper-middle-income countries, reflecting
+higher emigration, while high-income countries show positive net
+migration, indicating they are preferred destinations for migrants.
+
 ## n) Table of std-dev values
 
-## o) More averages
+```{=html}
+<!-- Look also at the standard deviation instead of the mean in m. Do you gain additional insights? Briefly
+comment the results. -->
+```
+```{r, message=FALSE}
+# Calculate standard deviations for median age, youth unemployment rate, and net migration rate grouped by income status
+std_dev_values <- processed_df_vars %>%
+  group_by(income_status) %>%
+  summarise(
+    std_dev_median_age = sd(median_age, na.rm = TRUE),
+    std_dev_youth_unemployment_rate = sd(youth_unempl_rate, na.rm = TRUE),
+    std_dev_net_migration_rate = sd(net_migration_rate, na.rm = TRUE)
+  ) %>%
+  mutate(income_status = factor(income_status, levels = c("L", "LM", "UM", "H"))) %>%
+  arrange(income_status)
 
-## p) Identify countries doing "well"
+print(std_dev_values)
+```
 
-<!-- The ex. sheet names this r), but there is no previous q -->
+The standard deviations underscore clear disparities among income
+groups. Lower-income countries show minimal variation in median age but
+significant in net migration, suggesting demographic stability but
+economic challenges. Upper-middle-income countries experience the most
+variability in both median age and migration, reflecting their complex
+socio-economic transitions. Meanwhile, high-income countries maintain
+consistent youth unemployment but diverse migration trends, highlighting
+how economic stability impacts different aspects of demographic
+behavior.
+
+## o) Table of average values by Income Status and Continent
+
+<!-- Repeat the analysis in m. for each income status and continent combination. Discuss the results. -->
+
+```{r, message=FALSE}
+# Calculate the average values for median age, youth unemployment rate, and net migration rate grouped by income status and continents
+combined_analysis <- processed_df_vars %>%
+  group_by(income_status, Continent) %>%
+  summarise(
+    average_median_age = mean(median_age, na.rm = TRUE),
+    average_youth_unemployment_rate = mean(youth_unempl_rate, na.rm = TRUE),
+    average_net_migration_rate = mean(net_migration_rate, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(income_status = factor(income_status, levels = c("L", "LM", "UM", "H"))) %>%
+  arrange(income_status, Continent)
+
+print(combined_analysis)
+```
+
+The analysis of median age, youth unemployment rate, and net migration
+rate across various income statuses and continents reveals distinct
+demographic and economic patterns. Higher median ages in high-income
+regions, particularly in Europe, suggest older populations, while
+lower-income areas like Africa and Asia have younger populations. Youth
+unemployment is notably high in upper-middle-income Africa, indicating
+economic challenges, whereas high-income areas display lower rates,
+suggesting better job market integration for youth. Net migration rates
+vary widely, with positive values in high-income Asia reflecting net
+immigration and significant negative values in upper-middle-income
+Oceania indicating high emigration.
+
+## p) Identifying top performer countries by youth unemployment and net migration rates
+
+```{=html}
+<!-- Identify countries which are doing well in terms of both youth unemployment and net migration rate (in the
+top 25% of their respective continent in terms of net migration rate and in the bottom 25% of their respective
+continent in terms of youth unemployment). -->
+```
+```{r, message=FALSE}
+# Identify countries that perform well in both net migration rate and youth unemployment rate within their respective continents
+country_performance <- processed_df_vars %>%
+  group_by(Continent) %>%
+  mutate(
+    # Determine the top 25% of countries by net migration rate within each continent
+    net_migration_rate_top25 = net_migration_rate >= quantile(net_migration_rate, 0.75, na.rm = TRUE),
+    # Determine the bottom 25% of countries by youth unemployment rate within each continent
+    youth_unempl_rate_bottom25 = youth_unempl_rate <= quantile(youth_unempl_rate, 0.25, na.rm = TRUE)
+  ) %>%
+  ungroup() %>%
+  # Filter countries that are in the top 25% for net migration and bottom 25% for youth unemployment
+  filter(net_migration_rate_top25 & youth_unempl_rate_bottom25)
+
+country_performance <- country_performance %>%
+  select(country_name, Continent, net_migration_rate, youth_unempl_rate)
+
+print(country_performance)
+```
 
 ## q) Export all to csv
+
+```{=html}
+<!-- Export the final data set to a csv with “;” separator and “.” as a symbol for missing values; no rownames
+should be included in the csv. Upload the .csv to TUWEL together with your .Rmd and .html (or .pdf). -->
+```
+```{r, message=FALSE}
+file_path <- "../data/final_dataset.csv"
+
+write.table(df_vars, 
+            file = file_path, 
+            na = ".",
+            sep = ";",
+            row.names = FALSE,
+            col.names = TRUE,
+            quote = FALSE)
+
+cat("Data exported successfully to", file_path)
+```
