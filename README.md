@@ -41,3 +41,8 @@ Workload distribution:
     - [x] o)
     - [x] p)
     - [x] q)
+
+
+## Case Study 3
+
+[Exercise sheet](/exerciseSheets/CS3_question.pdf)
