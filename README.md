@@ -45,6 +45,8 @@ Workload distribution:
 
 ## Case Study 3
 
+[Exercise sheet](/exerciseSheets/CS3_question.pdf)
+
 Workload distribution:
 - Block 1
     - [ ] a)
@@ -64,4 +66,3 @@ Workload distribution:
     - [ ] m)
     - [ ] n)
     - [ ] o)
-[Exercise sheet](/exerciseSheets/CS3_question.pdf)
