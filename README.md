@@ -45,4 +45,23 @@ Workload distribution:
 
 ## Case Study 3
 
+Workload distribution:
+- Block 1
+    - [ ] a)
+    - [ ] b)
+    - [ ] c)
+    - [ ] d)
+    - [ ] e)
+- Block 2
+    - [ ] f)  
+    - [ ] g)
+    - [ ] h)
+    - [ ] i)
+    - [ ] j)
+- Block 3
+    - [ ] k)
+    - [ ] l)
+    - [ ] m)
+    - [ ] n)
+    - [ ] o)
 [Exercise sheet](/exerciseSheets/CS3_question.pdf)
