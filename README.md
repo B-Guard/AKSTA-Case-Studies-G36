@@ -49,11 +49,11 @@ Workload distribution:
 
 Workload distribution:
 - Block 1
-    - [ ] a)
-    - [ ] b)
-    - [ ] c)
-    - [ ] d)
-    - [ ] e)
+    - [x] a)
+    - [x] b)
+    - [x] c)
+    - [x] d)
+    - [x] e)
 - Block 2
     - [ ] f)  
     - [ ] g)
