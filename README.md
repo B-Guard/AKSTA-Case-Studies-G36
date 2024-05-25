@@ -55,11 +55,11 @@ Workload distribution:
     - [x] d)
     - [x] e)
 - Block 2
-    - [ ] f)  
-    - [ ] g)
-    - [ ] h)
-    - [ ] i)
-    - [ ] j)
+    - [x] f)  
+    - [x] g)
+    - [x] h)
+    - [x] i)
+    - [x] j)
 - Block 3
     - [ ] k)
     - [ ] l)
