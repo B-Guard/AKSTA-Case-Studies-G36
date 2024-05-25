@@ -59,7 +59,7 @@ df <- read.csv(file_path, sep = ";", na.strings = ".", stringsAsFactors = FALSE)
 df <- df %>% filter(!is.na(income_status))
 
 # Transform income_status variable to factor
-df <- df %>% 
+df <- df %>%
   mutate(income_status = factor(income_status, levels = c("H", "UM", "LM", "L")))
 ```
 
@@ -84,6 +84,7 @@ ggplot(df, aes(x = median_age, fill = income_status, color = income_status)) +
   labs(x = "Median age of population") +
   guides(fill = guide_legend(reverse = FALSE), color = guide_legend(reverse = FALSE))
 ```
+
 In this plot, we observe a positive correlation between the median age of the population and the income status of the country. Specifically, low-income countries tend to have a lower median age, while high-income countries tend to have a higher median age. This trend is particularly evident in low-income countries, where the distribution is narrow (indicating low standard deviation) with a mean around 20 years old. In contrast, high-income countries have a peak around 43 years old.
 
 ## b) Income status in different continents
@@ -94,7 +95,6 @@ In this plot, we observe a positive correlation between the median age of the po
 -->
 ```
 ```{r, message=FALSE}
-
 df_cleaned <- df %>% filter(!is.na(Continent))
 # Create a stacked barplot of absolute frequencies
 ggplot(df_cleaned, aes(x = Continent, fill = income_status)) +
@@ -104,6 +104,7 @@ ggplot(df_cleaned, aes(x = Continent, fill = income_status)) +
   theme(legend.position = "top") +
   ggtitle("Distribution of Income Status Across Continents (Absolute Frequencies)")
 ```
+
 In this plot, we can first observe the number of countries analyzed for each continent, as we are working with absolute frequencies. Africa has the most countries, while South America has the fewest. Additionally, we see the distribution of income status within each continent. Africa has a significant number of low-income and low-medium income countries, followed by Asia. In contrast, Europe has a majority of high-income countries, no low-income countries, and very few low-medium income countries.
 
 ```{=html}
@@ -125,8 +126,8 @@ ggplot(df_rel_freq, aes(x = Continent, y = rel_freq, fill = income_status)) +
   theme_minimal() +
   theme(legend.position = "top") +
   ggtitle("Distribution of Income Status Across Continents (Relative Frequencies)")
-
 ```
+
 In this plot, since we are working with relative frequencies, we don't have information about the number of countries in each continent.  However, it gives us a clearer picture of how income status is distributed within each continent. This makes it easier to compare income levels across continents. For instance, we can see that a higher percentage of South American countries fall under the high-medium income category compared to Europe, North America, or Oceania.
 
 ```{=html}
@@ -139,9 +140,10 @@ In this plot, since we are working with relative frequencies, we don't have info
 contingency_table <- table(df$Continent, df$income_status)
 
 # Create a mosaic plot
-mosaicplot(contingency_table, main = "Mosaic Plot of Continents and Income Status", 
-           xlab = "Continent", ylab = "Income Status", col = rainbow(length(unique(df$income_status))))
-
+mosaicplot(contingency_table,
+  main = "Mosaic Plot of Continents and Income Status",
+  xlab = "Continent", ylab = "Income Status", col = rainbow(length(unique(df$income_status)))
+)
 ```
 
 ```{=html}
@@ -162,7 +164,7 @@ mosaicplot(contingency_table, main = "Mosaic Plot of Continents and Income Statu
 the plots in b. for this purpose. Comment on the results. -->
 ```
 ```{r, message=FALSE}
-asia_df <- df %>% filter(Continent == 'Asia')
+asia_df <- df %>% filter(Continent == "Asia")
 
 # Create a stacked barplot of absolute frequencies
 ggplot(asia_df, aes(x = Region_1, fill = income_status)) +
@@ -171,8 +173,8 @@ ggplot(asia_df, aes(x = Region_1, fill = income_status)) +
   theme_minimal() +
   theme(legend.position = "top") +
   ggtitle("Distribution of Income Status Across Subregions in Asia (Absolute Frequencies)")
-
 ```
+
 From this plot, we can observe differences across various sub-regions in Asia. Western Asia has the most countries and is the wealthiest region, followed by Eastern Asia, where most countries have high or upper-middle income, although some low-income countries are still present. In contrast, Central Asia and, especially, Southern Asia are poorer regions, with most countries falling into the low or lower-middle income categories.
 
 ## d) Net migration in different continents
@@ -190,22 +192,25 @@ constitutes the largest positive outlier.
 # Create parallel boxplots
 ggplot(df_cleaned, aes(x = income_status, y = net_migration_rate, color = Continent)) +
   geom_boxplot() +
-  labs(x = "Income Status", y = "Net Migration Rate", 
-       title = "Distribution of Net Migration Rate by Income Status and Continents")
+  labs(
+    x = "Income Status", y = "Net Migration Rate",
+    title = "Distribution of Net Migration Rate by Income Status and Continents"
+  )
 
 
 # Identify the largest negative outlier
-negative_outlier <- asia_df %>% 
+negative_outlier <- asia_df %>%
   filter(net_migration_rate == min(net_migration_rate, na.rm = TRUE))
 
 # Identify the largest positive outlier
-positive_outlier <- asia_df %>% 
+positive_outlier <- asia_df %>%
   filter(net_migration_rate == max(net_migration_rate, na.rm = TRUE))
 
 # Print the outliers
 print(negative_outlier)
 print(positive_outlier)
 ```
+
 In this plot, we can see the distribution of net migration rates by income status across different continents. There is a clear correlation between income status and net migration rate: high-income countries, particularly in Asia, Europe, North America, and Oceania, tend to have higher net migration rates, indicating more people entering than leaving these countries. This rate generally decreases as the income status lowers. However, an exception is seen in Asia, where the low-income status category shows a high net migration rate, including a significant outlier. Additionally, some continents, like South America, exhibit minimal migration movement overall. Conversely, Oceania demonstrates substantial emigration across all income levels, evident from consistently low net migration rates.
 
 ## e) Net migration in different subcontinents
@@ -222,11 +227,14 @@ boxplots by continent (hint: use facet_grid with scales = "free_x").
 ```{r, message=FALSE}
 ggplot(df_cleaned, aes(x = Region_1, y = net_migration_rate)) +
   geom_boxplot() +
-  labs(x = "Subcontinent", y = "Net Migration Rate", 
-       title = "Net Migration Rate by Subcontinent and Continent") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  facet_grid( ~ Continent, scales = "free_x")
+  labs(
+    x = "Subcontinent", y = "Net Migration Rate",
+    title = "Net Migration Rate by Subcontinent and Continent"
+  ) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  facet_grid(~Continent, scales = "free_x")
 ```
+
 In this plot, we explore migration flows within each continent, highlighting regional differences. In Africa, the variation in net migration rates is less pronounced. However, in Europe, there is a clear pattern of emigration from Eastern Europe to Western Europe, with Northern and Southern Europe also showing positive but less significant net migration rates. In North America, Northern America has the highest net migration rate, while the Caribbean and Central America regions experience more emigration. The differences are particularly striking in Oceania, where Australia and New Zealand see high immigration rates, while Melanesia, Micronesia, and Polynesia experience high emigration rates. Asia presents an interesting case in Western Asia, with Lebanon showing a very high emigration rate and Syria a very high immigration rate, suggesting a possible migration flow between these neighboring countries.
 
 ## f) Median net migration rate per subcontinent
