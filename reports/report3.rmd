@@ -24,6 +24,7 @@ output:
 ```{r, include=FALSE}
 library(dplyr)
 library(ggplot2)
+library(forcats)
 ```
 
 # Data
@@ -229,17 +230,31 @@ ggplot(df_cleaned, aes(x = Region_1, y = net_migration_rate)) +
 In this plot, we explore migration flows within each continent, highlighting regional differences. In Africa, the variation in net migration rates is less pronounced. However, in Europe, there is a clear pattern of emigration from Eastern Europe to Western Europe, with Northern and Southern Europe also showing positive but less significant net migration rates. In North America, Northern America has the highest net migration rate, while the Caribbean and Central America regions experience more emigration. The differences are particularly striking in Oceania, where Australia and New Zealand see high immigration rates, while Melanesia, Micronesia, and Polynesia experience high emigration rates. Asia presents an interesting case in Western Asia, with Lebanon showing a very high emigration rate and Syria a very high immigration rate, suggesting a possible migration flow between these neighboring countries.
 
 ## f) Median net migration rate per subcontinent
-<!-- The plot in task e. shows the distribution of the net migration rate for each subcontinent. Here you will work on visualizing only one summary statistic, namely the median. For each subcontinent, calculate the median net migration rate. Then create a plot which contains the sub-regions on the y-axis and the median net migration rate on the x-axis.
+<!-- The plot in task e. shows the distribution of the net migration rate for each subcontinent. Here you will work on visualizing only one summary statistic, namely the median.
+For each subcontinent, calculate the median net migration rate. Then create a plot which contains the sub-regions on the y-axis and the median net migration rate on the x-axis.
 - As geoms use points.
-- Color the points by continent – use a colorblind friendly palette (see e.g., here).
+- Color the points by continent – use a colorblind friendly palette (see e.g. http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/).
 - Rename the axes.
 - Using fct_reorder from the forcats package, arrange the levels of subcontinent such that in the plot the lowest (bottom) subcontinent contains the lowest median net migration rate and the upper most region contains the highest median net migration rate.
 - Comment on the plot. E.g., what are the regions with the most influx? What are the regions with the most outflux? -->
 ```{r, message=FALSE}
+df_summary <- df_cleaned %>%
+  group_by(Region_1, Continent) %>%
+  summarise(median_migration = median(net_migration_rate, na.rm = TRUE), .groups = "drop")
 
-
+ggplot(df_summary, aes(x = fct_reorder(Region_1, median_migration), y = median_migration, color = Continent)) +
+  geom_point() +
+  scale_color_brewer(palette = "Set2") +
+  labs(
+    x = "Subcontinent", y = "Median Net Migration Rate",
+    title = "Median Net Migration by Region",
+    color = "Continent"
+  ) +
+  theme_minimal() +
+  coord_flip()
 ```
 
+It is not difficult to recognise regions with high *influx* and *outflux* of migrants. Surprises Australia and New Zealand, which have the highest inwards value. On the other hand, and belonging to the same continent, Polynesia and Micronesia have the highest outflux median (possibly some of these migrants end up in Australia/New Zealand...). Other interesting aspects are: Europe is the only continent where all its subregions have a positive median net migration rate, and Africa is the only continent where all its subregions have a negative median net migration rate.
 
 ## g) Median youth unemployment rate per subcontinent
 <!-- For each subcontinent, calculate the median youth unemployment rate. Then create a plot which contains the sub-regions on the y-axis and the median unemployment rate on the x-axis.
@@ -250,13 +265,53 @@ In this plot, we explore migration flows within each continent, highlighting reg
 - Rename the axes.
 - Using fct_reorder from the forcats package, arrange the levels of subcontinent such that in the plot the lowest (bottom) subcontinent contains the lowest median youth unemployment rate and the upper most region contains the highest median youth unemployment rate.
 - Comment on the plot. E.g., what are the regions with the highest vs lowest youth unemployment rate? -->
+```{r, message=FALSE}
+df_sum_empl <- df_cleaned %>%
+  group_by(Region_1, Continent) %>%
+  summarise(median_unemployment = median(youth_unempl_rate, na.rm = TRUE), .groups = "drop")
 
+ggplot(df_sum_empl, aes(x = fct_reorder(Region_1, median_unemployment), y = median_unemployment, fill = Continent)) +
+  geom_bar(stat = "identity", alpha = 0.7) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    x = "Subcontinent", y = "Median Youth Unemployment Rate",
+    title = "Median Youth Unemployment Rate by Region",
+    fill = "Continent"
+  ) +
+  theme_bw() +
+  coord_flip()
+```
+
+Regions with the highest median unemployment rate are Southern and Northern Africa, followed by Polynesia and (unsurprisingly) Southern Europe. Regions with the lowest median unemployment rate are Eastern, Central and South-eastern Asia, closely followed by Western Africa.
 
 
 ## h) Median youth unemployment rate per subcontinent – with error bars
 <!-- The value displayed in the barplot in g. is the result of an aggregation, so it might be useful to also plot error bars, to have a general idea on how precise the median unemployment is. This can be achieved by plotting the error bars which reflect the standard deviation or the interquartile range of the variable in each of the subcontinents.
 Repeat the plot in h. but include also error bars which reflect the 25% and 75% quantiles. You can use geom_errorbar in ggplot2. -->
+```{r, message=FALSE}
+df_sum_empl <- df_cleaned %>%
+  group_by(Region_1, Continent) %>%
+  summarise(
+    median_unemployment = median(youth_unempl_rate, na.rm = TRUE),
+    lower = quantile(youth_unempl_rate, 0.25, na.rm = TRUE),
+    upper = quantile(youth_unempl_rate, 0.75, na.rm = TRUE),
+    .groups = "drop"
+  )
 
+ggplot(df_sum_empl, aes(x = fct_reorder(Region_1, median_unemployment), y = median_unemployment, fill = Continent)) +
+  geom_bar(stat = "identity", alpha = 0.7) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, color = "black") +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    x = "Subcontinent", y = "Median Youth Unemployment Rate",
+    title = "Median Youth Unemployment Rate by Region",
+    fill = "Continent"
+  ) +
+  theme_bw() +
+  coord_flip()
+```
+
+The added error bar only helps estimate the size of the subregion. Polynesia will have many countries, thus the high error bar, while Australia/New Zealand are only two, hence the almost non-existent error bar.
 
 
 ## i) Relationship between median age and net migration rate
@@ -264,12 +319,47 @@ Repeat the plot in h. but include also error bars which reflect the 25% and 75% 
 - Color the geoms based on the income status.
 - Add a regression line for each development status (using geom_smooth()).
 Comment on the plot. Do you see any relationship between the two variables? Do you see any difference among the income levels? -->
+```{r, message=FALSE, warning=FALSE}
+df_cleaned %>%
+  ggplot(aes(x = net_migration_rate, y = median_age, color = income_status)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) +
+  labs(x = "Net migration rate", y = "Median age", color = "Income Status") +
+  theme_bw()
 
+
+df_cleaned %>% 
+  ggplot(aes(x = net_migration_rate, y = median_age, color = income_status)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) +
+  coord_cartesian(xlim = c(-20, 20)) +
+  labs(x = "Net migration rate", y = "Median age", color = "Income Status") +
+  theme_bw()
+```
+
+Looking at the first graph is not really helpful, so the same information is shown in the second, just with the x axis clipped to \(\pm 20\). It is difficult to say whether a relation exists between net migration rate and median age. Points are really scattered and the regression lines, although fitted, do not represent the data very well. The only clear information that can be extracted is the median age based on income level. Low income countries have low median age, while high income countries have higher median age. Upper-middle and low-middle income countries are in between, but the relation is not so clear.
 
 
 ## j) Relationship between youth unemployment and net migration rate
 <!-- Create a plot as in Task f. but for youth unemployment and net migration rate. Comment briefly. -->
+```{r, message=FALSE, warning=FALSE}
+df_cleaned %>%
+  ggplot(aes(y = youth_unempl_rate, x = net_migration_rate, color = income_status)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) +
+  labs(y = "Youth Unemployment Rate", x = "Net migration Rate", color = "Income Status") +
+  theme_bw()
 
+df_cleaned %>%
+  ggplot(aes(y = youth_unempl_rate, x = net_migration_rate, color = income_status)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) +
+  coord_cartesian(xlim = c(-15, 15)) +
+  labs(y = "Youth Unemployment Rate", x = "Net migration Rate", color = "Income Status") +
+  theme_bw()
+```
+
+Similar to the previous case, no apparent relationship can be seen between youth unemployment rate and net migration rate. Not even clipping helps distinguish any pattern this time.
 
 
 <!-- ----------------------------------------------------------------------- -->
