@@ -181,7 +181,7 @@ From this plot, we can observe differences across various sub-regions in Asia. W
 ```{=html}
 <!-- 
 - Using ggplot2, create parallel boxplots showing the distribution of the net migration rate in the
-different income levels.
+different continents.
 - Prettify the plot (change y-, x-axis labels, etc).
 - Identify which country in Asia constitutes the largest negative outlier and which country in Asia
 constitutes the largest positive outlier.
@@ -190,11 +190,11 @@ constitutes the largest positive outlier.
 ```
 ```{r, message=FALSE}
 # Create parallel boxplots
-ggplot(df_cleaned, aes(x = income_status, y = net_migration_rate, color = Continent)) +
+p <- ggplot(df_cleaned, aes(x = Continent, y = net_migration_rate)) +
   geom_boxplot() +
   labs(
-    x = "Income Status", y = "Net Migration Rate",
-    title = "Distribution of Net Migration Rate by Income Status and Continents"
+    x = "Continent", y = "Net Migration Rate",
+    title = "Distribution of Net Migration Rate by Continent"
   )
 
 
@@ -206,12 +206,23 @@ negative_outlier <- asia_df %>%
 positive_outlier <- asia_df %>%
   filter(net_migration_rate == max(net_migration_rate, na.rm = TRUE))
 
+
+# Add the outlier points with labels
+p <- p +
+  geom_point(data = negative_outlier, aes(x = Continent, y = net_migration_rate), color = "blue", size = 3) +
+  geom_text(data = negative_outlier, aes(x = Continent, y = net_migration_rate, label = country_name), vjust = -1, color = "blue") +
+  geom_point(data = positive_outlier, aes(x = Continent, y = net_migration_rate), color = "red", size = 3) +
+  geom_text(data = positive_outlier, aes(x = Continent, y = net_migration_rate, label = country_name), vjust = 1.5, color = "red")
+
+# Print the plot
+print(p)
+
 # Print the outliers
 print(negative_outlier)
 print(positive_outlier)
 ```
 
-In this plot, we can see the distribution of net migration rates by income status across different continents. There is a clear correlation between income status and net migration rate: high-income countries, particularly in Asia, Europe, North America, and Oceania, tend to have higher net migration rates, indicating more people entering than leaving these countries. This rate generally decreases as the income status lowers. However, an exception is seen in Asia, where the low-income status category shows a high net migration rate, including a significant outlier. Additionally, some continents, like South America, exhibit minimal migration movement overall. Conversely, Oceania demonstrates substantial emigration across all income levels, evident from consistently low net migration rates.
+In this plot, we observe the distribution of net migration rates across different continents. Europe, being a high-income continent, generally exhibits a positive net migration rate, indicating that more people are entering than leaving. However, the overall plot reveals that each continent has both positive and negative outliers, providing a mixed view of migration patterns. Exceptions to this trend are Oceania and South America. Oceania demonstrates substantial emigration, with consistently low net migration rates, while South America exhibits minimal migration movement overall. Additionally, Asia has two very significant outliers (Syria and Lebanon), highlighting extreme migration patterns within the continent due to instability in that area.
 
 ## e) Net migration in different subcontinents
 ```{=html}
