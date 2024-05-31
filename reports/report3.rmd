@@ -25,6 +25,10 @@ output:
 library(dplyr)
 library(ggplot2)
 library(forcats)
+library(readr)
+library(rworldmap)
+library(plotly)
+library(GGally)
 ```
 
 # Data
@@ -381,26 +385,163 @@ df_cleaned %>%
 Similar to the previous case, no apparent relationship can be seen between youth unemployment rate and net migration rate. Not even clipping helps distinguish any pattern this time.
 
 
-<!-- ----------------------------------------------------------------------- -->
+<!-- Block 3 -->
 
 ## k) Merging population data
 <!-- Go online and find a data set which contains the 2020 population for the countries of the world together with ISO codes.
 - Download this data and merge it to the dataset you are working on in this case study using a left join. (A possible source: World Bank))
 - Inspect the data and check whether the join worked well. -->
+```{r, message=FALSE, warning=FALSE}
+# Load the population data
+population_data <- read_csv("../data/total_population.csv", show_col_types = FALSE)
+
+# Select only the relevant columns: Country Code and 2020 [YR2020]
+population_data <- population_data %>% select(`Country Code`, `2020 [YR2020]`)
+
+# Rename columns for easier merging
+population_data <- population_data %>%
+  rename(GENC = `Country Code`, Population = `2020 [YR2020]`)
+
+# Merge the population data with the existing dataset
+merged_df <- df %>%
+  left_join(population_data, by = "GENC")
+
+merged_df <- merged_df %>%
+  mutate(Population = as.numeric(Population))
+
+# Inspect the dataset
+
+# head(merged_df)
+
+# summary(merged_df)
+# str(merged_df)
+
+# missing_population <- merged_df %>% filter(is.na(Population))
+# print(missing_population)
+```
 
 ## l) Scatterplot of median age and net migration rate in Europe
 <!-- Make a scatterplot of median age and net migration rate for the countries of Europe. * Scale the size of the points according to each country’s population.
 - For better visibility, use a transparency of alpha=0.7.
 - Remove the legend.
 - Comment on the plot. -->
+```{r, message=FALSE, warning=FALSE}
+# Filter the dataset to include only European countries
+europe_data <- merged_df %>% filter(Continent == "Europe")
+
+# Create the scatter plot
+ggplot(europe_data, aes(x = net_migration_rate, y = median_age, size = Population)) +
+  geom_point(alpha = 0.7, color = "blue") +  
+  labs(
+    x = "Net Migration Rate",
+    y = "Median Age",
+    title = "Scatterplot of Median Age and Net Migration Rate in Europe"
+  ) +
+  theme_minimal() +  
+  theme(
+    legend.position = "none",  
+    plot.title = element_text(hjust = 0.5),  
+    axis.title = element_text(size = 12),  
+    axis.text = element_text(size = 12),  
+    panel.grid.major = element_line(color = "gray", size = 0.5),  
+    panel.grid.minor = element_blank()  
+  )
+```
+
+Most countries cluster around a median age of 40 to 45 years and a net migration rate close to zero, indicating stable migration patterns. There are a few outliers with higher net migration rates and varying median ages, reflecting diverse migration trends across Europe. This plot effectively highlights the central tendencies and differences in demographics and migration within Europe.
 
 ## m) Interactive plot
 <!-- On the merged data set from Task k., using function ggplotly from package plotly re-create the scatterplot in Task l., but this time for all countries. Color the points according to their continent.
 When hovering over the points the name of the country, the values for median age, net migration rate, and population should be shown. (Hint: use the aesthetic text = Country. In ggplotly use the argument tooltip = c("text", "x", "y", "size")). -->
+```{r, message=FALSE, warning=FALSE}
+# Create the scatter plot using ggplot2
+p <- ggplot(merged_df, aes(x = net_migration_rate, y = median_age, size = Population, color = Continent, text = country_name)) +
+  geom_point(alpha = 0.7) +  
+  labs(
+    x = "Net Migration Rate",
+    y = "Median Age",
+    title = "Scatterplot of Median Age and Net Migration Rate for All Countries"
+  ) +
+  theme_minimal() +  
+  theme(
+    legend.position = "right",  
+    plot.title = element_text(hjust = 0.5),  
+    axis.title = element_text(size = 12, face = "bold"),  
+    axis.text = element_text(size = 12)  
+  )
+
+# Convert the ggplot object to a plotly object for interactivity
+interactive_plot <- ggplotly(p, tooltip = c("text", "x", "y", "size"))
+
+interactive_plot
+```
 
 ## n) Parallel coordinate plot
 <!-- In parallel coordinate plots each observation or data point is depicted as a line traversing a series of parallel axes, corresponding to a specific variable or dimension. It is often used for identifying clusters in the data.
 One can create such a plot using the GGally R package. You should create such a plot where you look at the three main variables in the data set: median age, youth unemployment rate and net migration rate. Color the lines based on the income status. Briefly comment. -->
+```{r, message=FALSE, warning=FALSE}
+# Filter the dataset to select the relevant columns
+parallel_df <- merged_df %>%
+  select(median_age, youth_unempl_rate, net_migration_rate, income_status)
+
+# Create the parallel coordinate plot
+p <- ggparcoord(
+  data = parallel_df,
+  columns = 1:3,  
+  groupColumn = 4,  
+  scale = "uniminmax",  
+  alphaLines = 0.3  
+) +
+  labs(
+    title = "Parallel Coordinate Plot of Median Age, Youth Unemployment Rate, and Net Migration Rate",
+    x = "Variables",
+    y = "Scaled Values"
+  ) +
+  theme_minimal() +  
+  theme(
+    plot.title = element_text(hjust = 0.5),  
+    axis.title = element_text(size = 12),  
+    axis.text = element_text(size = 12),  
+    legend.position = "bottom"  
+  )
+
+print(p)
+```
+
+High-income countries generally have higher median ages and lower youth unemployment rates, while low-income countries have lower median ages and higher youth unemployment rates. The net migration rate varies widely within each income group, with high-income countries experiencing both higher and lower rates. Low-income countries tend to cluster around lower net migration rates.
+
+The values 1.00, 0.75, 0.50, 0.25, and 0.00 on the y-axis, represent the scaled values of the variables (median_age, youth_unempl_rate, and net_migration_rate), these allow for a direct comparison between different units.
 
 ## o) World map visualisation
 <!-- Using the package rworldmap, create a world map of the median age per country. Use the vignette https://cran.r-project.org/web/packages/rworldmap/vignettes/rworldmap.pdf to find how to do this in R. -->
+```{r, message=FALSE, warning=FALSE}
+# install.packages("rworldmap")
+
+# Prepare the data
+merged_df2 <- merged_df %>%
+  select(GENC, median_age) %>%
+  rename(ISO3 = GENC)
+
+# Join your data with the world map data
+sPDF <- joinCountryData2Map(merged_df2, joinCode = "ISO3", nameJoinColumn = "ISO3")
+
+# Define a more distinct color palette
+colorPalette <- colorRampPalette(c("lightyellow", "yellow", "orange", "red3", "darkred"))
+
+# Plot the world map
+mapCountryData(sPDF, nameColumnToPlot = "median_age", 
+               mapTitle = "World Map of Median Age per Country",
+               colourPalette = colorPalette(20), 
+               oceanCol = "lightblue", 
+               missingCountryCol = "gray",
+               borderCol = "gray", 
+               addLegend = TRUE)
+
+legend("bottomleft", legend = round(seq(min(sPDF$median_age, na.rm = TRUE), 
+                                        max(sPDF$median_age, na.rm = TRUE), 
+                                        length.out = 10), 1), 
+       fill = colorPalette(10), 
+       title = "Median Age",
+       cex = 0.8, 
+       bty = "n")
+```
