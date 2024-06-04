@@ -344,45 +344,51 @@ The added error bar only helps estimate the size of the subregion. Polynesia wil
 Comment on the plot. Do you see any relationship between the two variables? Do you see any difference among the income levels? -->
 ```{r, message=FALSE, warning=FALSE}
 df_cleaned %>%
-  ggplot(aes(x = net_migration_rate, y = median_age, color = income_status)) +
+  ggplot(aes(y = net_migration_rate, x = median_age, color = income_status)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) +
-  labs(x = "Net migration rate", y = "Median age", color = "Income Status") +
+  labs(y = "Net migration rate", x = "Median age", color = "Income Status") +
   theme_bw()
 
 
-df_cleaned %>% 
-  ggplot(aes(x = net_migration_rate, y = median_age, color = income_status)) +
+df_cleaned %>%
+  ggplot(aes(y = net_migration_rate, x = median_age, color = income_status)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) +
-  coord_cartesian(xlim = c(-20, 20)) +
-  labs(x = "Net migration rate", y = "Median age", color = "Income Status") +
+  coord_cartesian(ylim = c(-20, 20)) +
+  labs(y = "Net migration rate", x = "Median age", color = "Income Status") +
   theme_bw()
 ```
 
-Looking at the first graph is not really helpful, so the same information is shown in the second, just with the x axis clipped to \(\pm 20\). It is difficult to say whether a relation exists between net migration rate and median age. Points are really scattered and the regression lines, although fitted, do not represent the data very well. The only clear information that can be extracted is the median age based on income level. Low income countries have low median age, while high income countries have higher median age. Upper-middle and low-middle income countries are in between, but the relation is not so clear.
+Looking at the first graph is not really helpful, so the same information is shown in the second, just with the y axis clipped to \(\pm 20\). It is difficult to say whether a relation exists between net migration rate and median age. Points are really scattered and the regression lines do not represent the data very well. The only clear information that can be extracted is the low slope of medium income countries net migration rate, which suggests there might not be a relation between the variables.
 
 
 ## j) Relationship between youth unemployment and net migration rate
 <!-- Create a plot as in Task f. but for youth unemployment and net migration rate. Comment briefly. -->
 ```{r, message=FALSE, warning=FALSE}
 df_cleaned %>%
-  ggplot(aes(y = youth_unempl_rate, x = net_migration_rate, color = income_status)) +
+  ggplot(aes(x = youth_unempl_rate, y = net_migration_rate, color = income_status)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) +
-  labs(y = "Youth Unemployment Rate", x = "Net migration Rate", color = "Income Status") +
+  labs(x = "Youth Unemployment Rate", y = "Net migration Rate", color = "Income Status") +
   theme_bw()
 
+weird_country <- df_cleaned %>%
+  filter((income_status == "L" & net_migration_rate > 25))
+print(weird_country)
+
+# Outlier removal
 df_cleaned %>%
-  ggplot(aes(y = youth_unempl_rate, x = net_migration_rate, color = income_status)) +
+  filter(!(income_status == "L" & net_migration_rate > 25)) %>%
+  ggplot(aes(x = youth_unempl_rate, y = net_migration_rate, color = income_status)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) +
-  coord_cartesian(xlim = c(-15, 15)) +
-  labs(y = "Youth Unemployment Rate", x = "Net migration Rate", color = "Income Status") +
+  coord_cartesian(ylim = c(-15, 15)) +
+  labs(x = "Youth Unemployment Rate", y = "Net migration Rate", color = "Income Status") +
   theme_bw()
 ```
 
-Similar to the previous case, no apparent relationship can be seen between youth unemployment rate and net migration rate. Not even clipping helps distinguish any pattern this time.
+Similar to the previous case, no apparent relationship can be seen between youth unemployment rate and net migration rate. There is however, a really curious observation. There is one low level income country with a rather high youth unemployment rate, which exhibits the highest net migration rate (positive). After inspection, we find out that it is Syria. We do not have sufficient justifications to call it an outlier, but after removing it and clipping the plot, we obtain the second figure, which seems more reasonable. All regression lines are below 0 net migration rate except for high income, which has a marked negative slope and a higher intercept.
 
 
 <!-- Block 3 -->
@@ -431,20 +437,20 @@ europe_data <- merged_df %>% filter(Continent == "Europe")
 
 # Create the scatter plot
 ggplot(europe_data, aes(x = net_migration_rate, y = median_age, size = Population)) +
-  geom_point(alpha = 0.7, color = "blue") +  
+  geom_point(alpha = 0.7, color = "blue") +
   labs(
     x = "Net Migration Rate",
     y = "Median Age",
     title = "Scatterplot of Median Age and Net Migration Rate in Europe"
   ) +
-  theme_minimal() +  
+  theme_minimal() +
   theme(
-    legend.position = "none",  
-    plot.title = element_text(hjust = 0.5),  
-    axis.title = element_text(size = 12),  
-    axis.text = element_text(size = 12),  
-    panel.grid.major = element_line(color = "gray", size = 0.5),  
-    panel.grid.minor = element_blank()  
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5),
+    axis.title = element_text(size = 12),
+    axis.text = element_text(size = 12),
+    panel.grid.major = element_line(color = "gray", size = 0.5),
+    panel.grid.minor = element_blank()
   )
 ```
 
@@ -456,18 +462,18 @@ When hovering over the points the name of the country, the values for median age
 ```{r, message=FALSE, warning=FALSE}
 # Create the scatter plot using ggplot2
 p <- ggplot(merged_df, aes(x = net_migration_rate, y = median_age, size = Population, color = Continent, text = country_name)) +
-  geom_point(alpha = 0.7) +  
+  geom_point(alpha = 0.7) +
   labs(
     x = "Net Migration Rate",
     y = "Median Age",
     title = "Scatterplot of Median Age and Net Migration Rate for All Countries"
   ) +
-  theme_minimal() +  
+  theme_minimal() +
   theme(
-    legend.position = "right",  
-    plot.title = element_text(hjust = 0.5),  
-    axis.title = element_text(size = 12, face = "bold"),  
-    axis.text = element_text(size = 12)  
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 12)
   )
 
 # Convert the ggplot object to a plotly object for interactivity
@@ -487,22 +493,22 @@ parallel_df <- merged_df %>%
 # Create the parallel coordinate plot
 p <- ggparcoord(
   data = parallel_df,
-  columns = 1:3,  
-  groupColumn = 4,  
-  scale = "uniminmax",  
-  alphaLines = 0.3  
+  columns = 1:3,
+  groupColumn = 4,
+  scale = "uniminmax",
+  alphaLines = 0.3
 ) +
   labs(
     title = "Parallel Coordinate Plot of Median Age, Youth Unemployment Rate, and Net Migration Rate",
     x = "Variables",
     y = "Scaled Values"
   ) +
-  theme_minimal() +  
+  theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5),  
-    axis.title = element_text(size = 12),  
-    axis.text = element_text(size = 12),  
-    legend.position = "bottom"  
+    plot.title = element_text(hjust = 0.5),
+    axis.title = element_text(size = 12),
+    axis.text = element_text(size = 12),
+    legend.position = "bottom"
   )
 
 print(p)
@@ -529,19 +535,24 @@ sPDF <- joinCountryData2Map(merged_df2, joinCode = "ISO3", nameJoinColumn = "ISO
 colorPalette <- colorRampPalette(c("lightyellow", "yellow", "orange", "red3", "darkred"))
 
 # Plot the world map
-mapCountryData(sPDF, nameColumnToPlot = "median_age", 
-               mapTitle = "World Map of Median Age per Country",
-               colourPalette = colorPalette(20), 
-               oceanCol = "lightblue", 
-               missingCountryCol = "gray",
-               borderCol = "gray", 
-               addLegend = TRUE)
+mapCountryData(sPDF,
+  nameColumnToPlot = "median_age",
+  mapTitle = "World Map of Median Age per Country",
+  colourPalette = colorPalette(20),
+  oceanCol = "lightblue",
+  missingCountryCol = "gray",
+  borderCol = "gray",
+  addLegend = TRUE
+)
 
-legend("bottomleft", legend = round(seq(min(sPDF$median_age, na.rm = TRUE), 
-                                        max(sPDF$median_age, na.rm = TRUE), 
-                                        length.out = 10), 1), 
-       fill = colorPalette(10), 
-       title = "Median Age",
-       cex = 0.8, 
-       bty = "n")
+legend("bottomleft",
+  legend = round(seq(min(sPDF$median_age, na.rm = TRUE),
+    max(sPDF$median_age, na.rm = TRUE),
+    length.out = 10
+  ), 1),
+  fill = colorPalette(10),
+  title = "Median Age",
+  cex = 0.8,
+  bty = "n"
+)
 ```
