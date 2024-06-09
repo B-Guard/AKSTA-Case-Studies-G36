@@ -48,7 +48,11 @@ ui <- fluidPage(
             )
           ),
           actionButton("view_data", "View raw data"),
-          dataTableOutput("raw_data")
+          dataTableOutput("raw_data"),
+          radioButtons("outlier", "Outliers:",
+            choices = list("Keep" = "keep", "Remove" = "remove"),
+            selected = "keep"
+          ),
         ),
         mainPanel(
           tabsetPanel(
@@ -99,7 +103,12 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   selected_data <- reactive({
-    df %>% select(country, continent, !!input$variable)
+    data <- df
+    if (input$outlier == "remove") {
+      data <- data %>% dplyr::filter(net_migr_rate > -31, net_migr_rate < 25)
+    }
+    data <- data %>% select(country, continent, !!input$variable, ISO3)
+    data
   })
 
   observeEvent(input$variable, {
@@ -113,7 +122,8 @@ server <- function(input, output, session) {
   output$raw_data <- renderDataTable(
     {
       req(input$view_data)
-      selected_data()
+      data <- selected_data()
+      data
     },
     options = list(
       pageLength = 15, autoWidth = TRUE,
@@ -131,6 +141,7 @@ server <- function(input, output, session) {
   })
 
   output$boxplot_overall <- renderPlotly({
+    df <- selected_data()
     gg <- ggplot(df, aes(y = !!as.name(input$variable))) +
       geom_boxplot() +
       labs(y = input$variable, x = "Overall")
@@ -138,6 +149,7 @@ server <- function(input, output, session) {
   })
 
   output$boxplot_continent <- renderPlotly({
+    df <- selected_data()
     gg <- ggplot(df, aes(x = continent, y = !!as.name(input$variable), fill = continent)) +
       geom_boxplot() +
       labs(y = input$variable, x = "Continent")
