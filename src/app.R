@@ -63,16 +63,16 @@ ui <- fluidPage(
             )
           ),
           actionButton("view_data", "View raw data"),
-          dataTableOutput("raw_data"),
           radioButtons("outlier", "Outliers:",
             choices = list("Keep" = "keep", "Remove" = "remove"),
             selected = "keep"
           ),
+          dataTableOutput("raw_data")          
         ),
         mainPanel(
           tabsetPanel(
             id = "univariate_tabs",
-            tabPanel("Map", plotlyOutput("map_plot")),
+            tabPanel("Map", plotlyOutput("map_plot", height = 800)),
             tabPanel("Boxplot (overall)", plotlyOutput("boxplot_overall")),
             tabPanel("Boxplot per continent", plotlyOutput("boxplot_continent"))
           )
@@ -160,7 +160,7 @@ server <- function(input, output, session) {
       geom_polygon(color = "white") +
       scale_fill_viridis_c() +
       theme_void() +
-      labs(fill = friendly_labels[[input$variable]]) +
+      labs(fill = friendly_labels[[input$variable]])
      ggplotly(gg, tooltip = "text")
   })
 
