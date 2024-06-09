@@ -146,8 +146,7 @@ server <- function(input, output, session) {
       data
     },
     options = list(
-      pageLength = 15, autoWidth = TRUE,
-      lengthMenu = list(c(15, -1), c("15", "All"))
+      pageLength = 15, autoWidth = TRUE, lengthChange = FALSE
     )
   )
 
