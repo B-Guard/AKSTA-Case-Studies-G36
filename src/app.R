@@ -53,19 +53,19 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           selectInput("variable", "Select a variable:",
-            choices = list(
-              "Median age" = "median_age",
-              "Youth unemployment rate" = "youth_unempl_rate",
-              "Net migration rate" = "net_migr_rate",
-              "Population growth rate" = "pop_growth_rate",
-              "Electricity (fossil fuel)" = "electricity_fossil_fuel",
-              "Life expectancy" = "life_expectancy"
-            )
+                      choices = list(
+                        "Median age" = "median_age",
+                        "Youth unemployment rate" = "youth_unempl_rate",
+                        "Net migration rate" = "net_migr_rate",
+                        "Population growth rate" = "pop_growth_rate",
+                        "Electricity (fossil fuel)" = "electricity_fossil_fuel",
+                        "Life expectancy" = "life_expectancy"
+                      )
           ),
           actionButton("view_data", "View raw data"),
           radioButtons("outlier", "Outliers:",
-            choices = list("Keep" = "keep", "Remove" = "remove"),
-            selected = "keep"
+                       choices = list("Keep" = "keep", "Remove" = "remove"),
+                       selected = "keep"
           ),
           dataTableOutput("raw_data")          
         ),
@@ -84,27 +84,27 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           selectInput("var_x", "Select variable 1:",
-            choices = list(
-              "Median age" = "median_age",
-              "Youth unemployment rate" = "youth_unempl_rate",
-              "Net migration rate" = "net_migr_rate",
-              "Population growth rate" = "pop_growth_rate",
-              "Electricity (fossil fuel)" = "electricity_fossil_fuel",
-              "Life expectancy" = "life_expectancy"
-            )
+                      choices = list(
+                        "Median age" = "median_age",
+                        "Youth unemployment rate" = "youth_unempl_rate",
+                        "Net migration rate" = "net_migr_rate",
+                        "Population growth rate" = "pop_growth_rate",
+                        "Electricity (fossil fuel)" = "electricity_fossil_fuel",
+                        "Life expectancy" = "life_expectancy"
+                      )
           ),
           selectInput("var_y", "Select variable 2:",
-            choices = list(
-              "Median age" = "median_age",
-              "Youth unemployment rate" = "youth_unempl_rate",
-              "Net migration rate" = "net_migr_rate",
-              "Population growth rate" = "pop_growth_rate",
-              "Electricity (fossil fuel)" = "electricity_fossil_fuel",
-              "Life expectancy" = "life_expectancy"
-            )
+                      choices = list(
+                        "Median age" = "median_age",
+                        "Youth unemployment rate" = "youth_unempl_rate",
+                        "Net migration rate" = "net_migr_rate",
+                        "Population growth rate" = "pop_growth_rate",
+                        "Electricity (fossil fuel)" = "electricity_fossil_fuel",
+                        "Life expectancy" = "life_expectancy"
+                      )
           ),
           selectInput("size_var", "Scale points by:",
-            choices = list("Population" = "population", "Area" = "area")
+                      choices = list("Population" = "population", "Area" = "area")
           )
         ),
         mainPanel(
@@ -125,15 +125,15 @@ server <- function(input, output, session) {
     data <- data %>% select(country, continent, !!input$variable, ISO3)
     data
   })
-
+  
   observeEvent(input$variable, {
     print(input$variable)
   })
-
+  
   observeEvent(input$var_x, {
     print(input$var_x)
   })
-
+  
   output$raw_data <- renderDataTable(
     {
       req(input$view_data)
@@ -149,7 +149,7 @@ server <- function(input, output, session) {
       pageLength = 15, autoWidth = TRUE, lengthChange = FALSE
     )
   )
-
+  
   output$map_plot <- renderPlotly({
     df <- selected_data()
     world_map <- left_join(world_map, df, by = c("ISO3" = "ISO3"))
@@ -161,9 +161,9 @@ server <- function(input, output, session) {
       scale_fill_viridis_c() +
       theme_void() +
       labs(fill = friendly_labels[[input$variable]])
-     ggplotly(gg, tooltip = "text")
+    ggplotly(gg, tooltip = "text")
   })
-
+  
   output$boxplot_overall <- renderPlotly({
     df <- selected_data()
     gg <- ggplot(df, aes(y = !!as.name(input$variable))) +
@@ -171,7 +171,7 @@ server <- function(input, output, session) {
       labs(y = friendly_labels[[input$variable]], x = "Overall")
     ggplotly(gg)
   })
-
+  
   output$boxplot_continent <- renderPlotly({
     df <- selected_data()
     gg <- ggplot(df, aes(x = continent, y = !!as.name(input$variable), fill = continent)) +
@@ -179,20 +179,25 @@ server <- function(input, output, session) {
       labs(y = friendly_labels[[input$variable]], x = "Continent")
     ggplotly(gg)
   })
-
+  
   output$scatter_plot <- renderPlotly({
     gg <- ggplot(df, aes(
       x = !!as.name(input$var_x), y = !!as.name(input$var_y),
       color = continent, size = !!as.name(input$size_var),
       text = paste(
-        friendly_labels[[input$var_x]], df[[input$var_x]],
-        "<br>", friendly_labels[[input$var_y]], df[[input$var_y]],
-        "<br>Country:", df$country
+        "<br>", friendly_labels[[input$var_x]], ": ", !!as.name(input$var_x),
+        "<br>", friendly_labels[[input$var_y]], ": ", !!as.name(input$var_y),
+        "<br> Country:", df$country,
+        "<br>", friendly_labels[[input$size_var]], ": ", !!as.name(input$size_var)
       )
     )) +
       geom_point(alpha = 0.6) +
-      labs(x = friendly_labels[[input$var_x]], y = friendly_labels[[input$var_y]])
-    ggplotly(gg, tooltip = "text")
+      labs(x = friendly_labels[[input$var_x]], y = friendly_labels[[input$var_y]], color = "Continent") +
+      guides(size = "none")
+    
+    ggplotly(gg, tooltip = "text") %>%
+      layout(legend = list(title = list(text = paste(friendly_labels[[input$size_var]], "<br>Continent"))))
+    
   })
 }
 
